@@ -1,11 +1,21 @@
-<mat-card>Breadcrums</mat-card>
+<mat-card>Breadcrums</mat-card >
 <mat-card>Classes: {{htoClasses}}</mat-card>
 <mat-card>Properties</mat-card>
 <mat-card>Entities</mat-card>
 <mat-card>Actions</mat-card>
 <mat-card>
-  <div>Links:</div>
-  <mat-card>
-    <a >A link</a>
-  </mat-card>
+  <mat-card-title>
+    Links:
+  </mat-card-title>
+
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let link of htoLinks" >
+          <button mat-raised-button  (click)="navigateLink(link)">
+            {{link.relations.join(',')}}
+          </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+
 </mat-card>

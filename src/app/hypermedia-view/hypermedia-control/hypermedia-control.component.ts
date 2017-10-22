@@ -1,6 +1,7 @@
-import { HypermediaClientService } from './../hypermedia-client.service';
+import { HypermediaClientService, HypermediaLink } from './../hypermedia-client.service';
 import { Component, OnInit } from '@angular/core';
 import { SirenClientObject } from '../hypermedia-client.service';
+
 
 @Component({
   selector: 'app-hypermedia-control',
@@ -9,12 +10,25 @@ import { SirenClientObject } from '../hypermedia-client.service';
 })
 export class HypermediaControlComponent implements OnInit {
 
-  private htoClasses: string;
+  public htoClasses: string;
+  public htoLinks: HypermediaLink[] = new Array<HypermediaLink>();
+  public count: number = -1;
+  private hypermediaObject$ ;
 
   constructor(private hypermediaClient: HypermediaClientService) { }
 
   ngOnInit() {
-    this.hypermediaClient.enterApi().subscribe((hto) => this.htoClasses = hto.classes.join(','));
+
+    this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
+      this.htoClasses = hto.classes.join(',');
+      this.htoLinks = hto.links;
+    });
+
+    this.hypermediaClient.enterApi();
+  }
+
+  navigateLink(hypermediaLink: HypermediaLink) {
+    this.hypermediaClient.Navigate(hypermediaLink.url);
   }
 
 }
