@@ -1,5 +1,6 @@
 import { HypermediaClientService } from './../hypermedia-client.service';
 import { Component, OnInit } from '@angular/core';
+import { SirenClientObject } from '../hypermedia-client.service';
 
 @Component({
   selector: 'app-hypermedia-control',
@@ -13,7 +14,7 @@ export class HypermediaControlComponent implements OnInit {
   constructor(private hypermediaClient: HypermediaClientService) { }
 
   ngOnInit() {
-    this.hypermediaClient.enterApi().subscribe((hto: any) => this.htoClasses = ((<string[]>hto.class).join(',') ));
+    this.hypermediaClient.enterApi().subscribe((hto) => this.htoClasses = hto.classes.join(','));
   }
 
 }
