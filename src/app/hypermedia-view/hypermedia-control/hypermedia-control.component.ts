@@ -1,4 +1,4 @@
-import { HypermediaClientService, HypermediaLink } from './../hypermedia-client.service';
+import { HypermediaClientService, HypermediaLink, PropertyInfo, PropertyTypes } from './../hypermedia-client.service';
 import { Component, OnInit } from '@angular/core';
 import { SirenClientObject } from '../hypermedia-client.service';
 
@@ -9,11 +9,11 @@ import { SirenClientObject } from '../hypermedia-client.service';
   styleUrls: ['./hypermedia-control.component.scss']
 })
 export class HypermediaControlComponent implements OnInit {
-
   public htoClasses: string;
   public htoLinks: HypermediaLink[] = new Array<HypermediaLink>();
-  public count: number = -1;
-  private hypermediaObject$ ;
+  htoProperties: PropertyInfo[]= new Array<PropertyInfo>();
+
+  public propertyTypes = PropertyTypes;
 
   constructor(private hypermediaClient: HypermediaClientService) { }
 
@@ -22,6 +22,7 @@ export class HypermediaControlComponent implements OnInit {
     this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
       this.htoClasses = hto.classes.join(',');
       this.htoLinks = hto.links;
+      this.htoProperties = hto.properties;
     });
 
     this.hypermediaClient.enterApi();

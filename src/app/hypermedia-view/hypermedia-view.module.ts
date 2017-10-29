@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 import {MatCardModule} from '@angular/material';
-import {MatButtonModule} from '@angular/material';
+import {MatButtonModule, MatGridListModule, MatCheckboxModule} from '@angular/material';
 
 import { HypermediaControlComponent } from './hypermedia-control/hypermedia-control.component';
 import {HypermediaClientService} from './hypermedia-client.service';
@@ -15,6 +15,8 @@ import {HypermediaClientService} from './hypermedia-client.service';
     HttpClientModule,
     MatCardModule,
     MatButtonModule,
+    MatGridListModule,
+    MatCheckboxModule,
   ],
   exports: [
     HypermediaControlComponent
