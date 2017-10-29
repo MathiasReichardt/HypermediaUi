@@ -1,4 +1,4 @@
-import { HypermediaClientService, HypermediaLink, PropertyInfo, PropertyTypes } from './../hypermedia-client.service';
+import { HypermediaClientService, HypermediaLink, PropertyInfo, PropertyTypes, EmbeddedEntity, EmbeddedLinkEntity } from './../hypermedia-client.service';
 import { Component, OnInit } from '@angular/core';
 import { SirenClientObject } from '../hypermedia-client.service';
 
@@ -9,9 +9,11 @@ import { SirenClientObject } from '../hypermedia-client.service';
   styleUrls: ['./hypermedia-control.component.scss']
 })
 export class HypermediaControlComponent implements OnInit {
-  public htoClasses: string;
-  public htoLinks: HypermediaLink[] = new Array<HypermediaLink>();
-  htoProperties: PropertyInfo[]= new Array<PropertyInfo>();
+  public embeddedLinkEntities: EmbeddedLinkEntity[];
+  public embeddedEntities: EmbeddedEntity[];
+  public classes: string;
+  public links: HypermediaLink[] = new Array<HypermediaLink>();
+  public properties: PropertyInfo[]= new Array<PropertyInfo>();
 
   public propertyTypes = PropertyTypes;
 
@@ -20,9 +22,11 @@ export class HypermediaControlComponent implements OnInit {
   ngOnInit() {
 
     this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
-      this.htoClasses = hto.classes.join(',');
-      this.htoLinks = hto.links;
-      this.htoProperties = hto.properties;
+      this.classes = hto.classes.join(',');
+      this.links = hto.links;
+      this.properties = hto.properties;
+      this.embeddedLinkEntities = hto.embeddedLinkEntities;
+      this.embeddedEntities = hto.embeddedEntities;
     });
 
     this.hypermediaClient.enterApi();

@@ -1,5 +1,5 @@
 <mat-card>Breadcrums</mat-card>
-<mat-card>Classes: {{htoClasses}}</mat-card>
+<mat-card>Classes: {{classes}}</mat-card>
 <mat-card>
   <mat-card-title>
     Properties:
@@ -8,37 +8,37 @@
   <mat-card-content>
     <!-- make this a componenet: PropertyList -->
     <mat-list>
-      <ng-container *ngFor="let property of htoProperties">
+      <ng-container *ngFor="let property of properties">
         <div [ngSwitch]="property.type" class="propertyGrid">
 
-          <ng-container  *ngSwitchCase="propertyTypes.number">
-              <div class="propertyLable">{{property.name}}:</div>
-              <div class="propertyValue">{{property.value}}</div>
+          <ng-container *ngSwitchCase="propertyTypes.number">
+            <div class="propertyLable">{{property.name}}:</div>
+            <div class="propertyValue">{{property.value}}</div>
           </ng-container>
 
           <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.string">
-              <div class="propertyLable">{{property.name}}:</div>
-              <div class="propertyValue">{{property.value}}</div>
+            <div class="propertyLable">{{property.name}}:</div>
+            <div class="propertyValue">{{property.value}}</div>
           </ng-container>
 
           <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.boolean">
-              <div class="propertyLable">{{property.name}}:</div>
-              <mat-checkbox [checked]="property.value" [disabled]="true"></mat-checkbox>
+            <div class="propertyLable">{{property.name}}:</div>
+            <mat-checkbox [checked]="property.value" [disabled]="true"></mat-checkbox>
           </ng-container>
 
           <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.nullvalue">
-              <div class="propertyLable">{{property.name}}:</div>
-              <div class="propertyValue">null</div>
+            <div class="propertyLable">{{property.name}}:</div>
+            <div class="propertyValue">null</div>
           </ng-container>
 
           <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.array">
-              <div class="propertyLable">{{property.name}}:</div>
-              <div class="propertyValue">array values not shown</div>
+            <div class="propertyLable">{{property.name}}:</div>
+            <div class="propertyValue">array values not shown</div>
           </ng-container>
 
           <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.object">
-              <div class="propertyLable">{{property.name}}:</div>
-              <div class="propertyValue">object values not shown</div>
+            <div class="propertyLable">{{property.name}}:</div>
+            <div class="propertyValue">object values not shown</div>
           </ng-container>
         </div>
       </ng-container>
@@ -49,7 +49,30 @@
 </mat-card>
 
 
-<mat-card>Entities</mat-card>
+<mat-card>
+  <mat-card-title>
+    Entities:
+  </mat-card-title>
+
+  <mat-card-content>
+        <mat-expansion-panel *ngFor="let embeddedEntity of embeddedEntities; let idx = index">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{idx + 1}}: {{embeddedEntity.relations.join(",")}}
+            </mat-panel-title>
+            <mat-panel-description>
+               Classes: {{embeddedEntity.classes.join(",")}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          Put whole entity here
+
+        </mat-expansion-panel>
+    <div class="warning" *ngIf="embeddedLinkEntities?.length !== 0">Warning: no Link Entities shown.</div>
+  </mat-card-content>
+</mat-card>
+
+
 <mat-card>Actions</mat-card>
 
 
@@ -60,7 +83,7 @@
 
   <mat-card-content>
     <mat-list>
-      <mat-list-item *ngFor="let link of htoLinks">
+      <mat-list-item *ngFor="let link of links">
         <button mat-raised-button (click)="navigateLink(link)">
           {{link.relations.join(',')}}
         </button>
