@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-title>
+    Entities ({{embeddedEntities?.length + embeddedLinkEntities?.length}})
+  </mat-card-title>
+
+  <mat-card-content>
+        <mat-expansion-panel *ngFor="let embeddedEntity of embeddedEntities; let idx = index">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{idx + 1}}: {{embeddedEntity.relations.join(",")}}
+            </mat-panel-title>
+            <mat-panel-description>
+               Classes: {{embeddedEntity.classes.join(",")}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          Put whole entity here
+
+        </mat-expansion-panel>
+    <div class="warning" *ngIf="embeddedLinkEntities?.length !== 0">Warning: no Link Entities shown.</div>
+  </mat-card-content>
+</mat-card>

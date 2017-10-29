@@ -9,6 +9,7 @@ import { HypermediaControlComponent } from './hypermedia-control/hypermedia-cont
 import {HypermediaClientService} from './hypermedia-client.service';
 import { PropertyGridComponent } from './property-grid/property-grid.component';
 import { LinkViewComponent } from './link-view/link-view.component';
+import { EntityViewComponent } from './entity-view/entity-view.component';
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import { LinkViewComponent } from './link-view/link-view.component';
   exports: [
     HypermediaControlComponent
   ],
-  declarations: [HypermediaControlComponent, PropertyGridComponent, LinkViewComponent],
+  declarations: [HypermediaControlComponent, PropertyGridComponent, LinkViewComponent, EntityViewComponent],
   providers: [HypermediaClientService]
 })
 export class HypermediaViewModule { }
