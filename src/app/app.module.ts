@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
+import { ErrorDialogModule } from './error-dialog/error-dialog.module';
+
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -13,6 +15,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ErrorDialogModule,
     HypermediaViewModule,
   ],
   providers: [],

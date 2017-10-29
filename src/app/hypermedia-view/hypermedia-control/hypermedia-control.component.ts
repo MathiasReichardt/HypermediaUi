@@ -17,11 +17,10 @@ export class HypermediaControlComponent implements OnInit {
 
 
 
-  constructor(private hypermediaClient: HypermediaClientService) { }
+  constructor(private hypermediaClient: HypermediaClientService) {  }
 
   ngOnInit() {
-
-    this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
+      this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
       this.classes = hto.classes.join(',');
       this.links = hto.links;
       this.properties = hto.properties;
