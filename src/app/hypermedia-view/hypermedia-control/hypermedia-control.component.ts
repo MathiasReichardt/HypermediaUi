@@ -31,8 +31,6 @@ export class HypermediaControlComponent implements OnInit {
     this.hypermediaClient.enterApi();
   }
 
-  navigateLink(hypermediaLink: HypermediaLink) {
-    this.hypermediaClient.Navigate(hypermediaLink.url);
-  }
+
 
 }

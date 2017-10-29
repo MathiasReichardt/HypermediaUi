@@ -30,20 +30,4 @@
 
 <mat-card>Actions</mat-card>
 
-
-<mat-card>
-  <mat-card-title>
-    Links:
-  </mat-card-title>
-
-  <mat-card-content>
-    <mat-list>
-      <mat-list-item *ngFor="let link of links">
-        <button mat-raised-button (click)="navigateLink(link)">
-          {{link.relations.join(',')}}
-        </button>
-      </mat-list-item>
-    </mat-list>
-  </mat-card-content>
-
-</mat-card>
+<app-link-view [links]="links"></app-link-view>

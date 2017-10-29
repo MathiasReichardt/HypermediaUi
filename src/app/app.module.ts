@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { ErrorDialogModule } from './error-dialog/error-dialog.module';
 
 import { AppComponent } from './app.component';
+import { LinkViewComponent } from './hypermedia-view/link-view/link-view.component';
 
 @NgModule({
   declarations: [
