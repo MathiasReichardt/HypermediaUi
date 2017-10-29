@@ -7,6 +7,7 @@ import {MatButtonModule, MatGridListModule, MatCheckboxModule, MatExpansionModul
 
 import { HypermediaControlComponent } from './hypermedia-control/hypermedia-control.component';
 import {HypermediaClientService} from './hypermedia-client.service';
+import { PropertyGridComponent } from './property-grid/property-grid.component';
 
 
 @NgModule({
@@ -22,7 +23,7 @@ import {HypermediaClientService} from './hypermedia-client.service';
   exports: [
     HypermediaControlComponent
   ],
-  declarations: [HypermediaControlComponent],
+  declarations: [HypermediaControlComponent, PropertyGridComponent],
   providers: [HypermediaClientService]
 })
 export class HypermediaViewModule { }

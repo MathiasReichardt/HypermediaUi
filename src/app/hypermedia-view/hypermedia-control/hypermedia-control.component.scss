@@ -1,14 +1,1 @@
-.propertyGrid {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-  grid-template-rows:1rem;
-  padding: 0.25rem;
-}
 
-.propertyLable .propertyValue {
-  justify-self: start;
-}
-
-.warning {
-  color: red;
-}

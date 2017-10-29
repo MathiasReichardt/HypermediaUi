@@ -1,4 +1,4 @@
-import { HypermediaClientService, HypermediaLink, PropertyInfo, PropertyTypes, EmbeddedEntity, EmbeddedLinkEntity } from './../hypermedia-client.service';
+import { HypermediaClientService, HypermediaLink, PropertyInfo,  EmbeddedEntity, EmbeddedLinkEntity } from './../hypermedia-client.service';
 import { Component, OnInit } from '@angular/core';
 import { SirenClientObject } from '../hypermedia-client.service';
 
@@ -15,7 +15,7 @@ export class HypermediaControlComponent implements OnInit {
   public links: HypermediaLink[] = new Array<HypermediaLink>();
   public properties: PropertyInfo[]= new Array<PropertyInfo>();
 
-  public propertyTypes = PropertyTypes;
+
 
   constructor(private hypermediaClient: HypermediaClientService) { }
 

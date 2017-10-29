@@ -1,0 +1,46 @@
+<mat-card>
+    <mat-card-title>
+      Properties:
+    </mat-card-title>
+
+    <mat-card-content>
+      <mat-list>
+        <ng-container *ngFor="let property of propertyContainer">
+          <div [ngSwitch]="property.type" class="propertyGrid">
+
+            <ng-container *ngSwitchCase="propertyTypes.number">
+              <div class="propertyLable">{{property.name}}:</div>
+              <div class="propertyValue">{{property.value}}</div>
+            </ng-container>
+
+            <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.string">
+              <div class="propertyLable">{{property.name}}:</div>
+              <div class="propertyValue">{{property.value}}</div>
+            </ng-container>
+
+            <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.boolean">
+              <div class="propertyLable">{{property.name}}:</div>
+              <mat-checkbox [checked]="property.value" [disabled]="true"></mat-checkbox>
+            </ng-container>
+
+            <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.nullvalue">
+              <div class="propertyLable">{{property.name}}:</div>
+              <div class="propertyValue">null</div>
+            </ng-container>
+
+            <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.array">
+              <div class="propertyLable">{{property.name}}:</div>
+              <div class="propertyValue">array values not shown</div>
+            </ng-container>
+
+            <ng-container class="propertyItem" *ngSwitchCase="propertyTypes.object">
+              <div class="propertyLable">{{property.name}}:</div>
+              <div class="propertyValue">object values not shown</div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </mat-list>
+
+    </mat-card-content>
+
+  </mat-card>
