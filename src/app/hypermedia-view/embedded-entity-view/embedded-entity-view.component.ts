@@ -2,11 +2,11 @@ import { EmbeddedEntity, EmbeddedLinkEntity } from './../hypermedia-client.servi
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-entity-view',
-  templateUrl: './entity-view.component.html',
-  styleUrls: ['./entity-view.component.scss']
+  selector: 'app-embedded-entity-view',
+  templateUrl: './embedded-entity-view.component.html',
+  styleUrls: ['./embedded-entity-view.component.scss']
 })
-export class EntityViewComponent implements OnInit {
+export class EmbeddedEntityViewComponent implements OnInit {
   @Input() embeddedLinkEntities: EmbeddedLinkEntity[];
   @Input() embeddedEntities: EmbeddedEntity[];
 

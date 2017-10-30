@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EntityViewComponent } from './entity-view.component';
+import { EntityViewComponent } from './embedded-entity-view.component';
 
 describe('EntityViewComponent', () => {
   let component: EntityViewComponent;
