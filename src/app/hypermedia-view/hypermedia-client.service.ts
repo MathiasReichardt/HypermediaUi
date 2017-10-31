@@ -12,6 +12,7 @@ export class HypermediaClientService {
   // private entryPoint = 'http://localhost:5000/Customers/1';
 
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
+  private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
 
   constructor(private httpClient: AngularHttpClient) { }
 
@@ -19,17 +20,23 @@ export class HypermediaClientService {
     return this.currentClientObject$;
   }
 
+  getHypermediaObjectRawStream(): BehaviorSubject<object> {
+    return this.currentClientObjectRaw$;
+  }
+
   enterApi() {
-    this.httpClient.get(this.entryPoint).subscribe(res => { // TODO is subscribe ok here? use pipe?
-      const next = this.MapResponse(res);
-      this.currentClientObject$.next(next);
+    this.httpClient.get(this.entryPoint).subscribe(response => { // TODO is subscribe ok here? use pipe?
+      const sirenClientObject = this.MapResponse(response);
+      this.currentClientObject$.next(sirenClientObject);
+      this.currentClientObjectRaw$.next(response);
     });
   }
 
   Navigate(url: string) {
-    this.httpClient.get(url).subscribe(res => {  // TODO is subscribe ok here? use pipe?
-      const next = this.MapResponse(res);
-      this.currentClientObject$.next(next);
+    this.httpClient.get(url).subscribe(response => {  // TODO is subscribe ok here? use pipe?
+      const sirenClientObject = this.MapResponse(response);
+      this.currentClientObject$.next(sirenClientObject);
+      this.currentClientObjectRaw$.next(response);
     });
   }
 

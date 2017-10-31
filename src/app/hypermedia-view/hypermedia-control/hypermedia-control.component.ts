@@ -9,6 +9,7 @@ import { SirenClientObject } from '../hypermedia-client.service';
   styleUrls: ['./hypermedia-control.component.scss']
 })
 export class HypermediaControlComponent implements OnInit {
+  public rawResponse: object;
   public hto: SirenClientObject;
 
   constructor(private hypermediaClient: HypermediaClientService) {  }
@@ -16,6 +17,10 @@ export class HypermediaControlComponent implements OnInit {
   ngOnInit() {
       this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
       this.hto = hto;
+    });
+
+    this.hypermediaClient.getHypermediaObjectRawStream().subscribe((rawResponse) => {
+      this.rawResponse = rawResponse;
     });
 
     this.hypermediaClient.enterApi();

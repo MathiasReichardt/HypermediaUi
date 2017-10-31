@@ -1,3 +1,9 @@
 <mat-card>Breadcrums</mat-card>
-
-<app-entity-view [entity]="hto"></app-entity-view>
+<mat-tab-group>
+  <mat-tab label="UI">
+    <app-entity-view [entity]="hto"></app-entity-view>
+  </mat-tab>
+  <mat-tab label="Raw">
+    <app-raw-view [rawObject]="rawResponse"></app-raw-view>
+  </mat-tab>
+</mat-tab-group>

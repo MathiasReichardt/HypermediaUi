@@ -1,0 +1,14 @@
+:host /deep/ * {
+  font-family: monospace;
+}
+
+:host /deep/ pre span {
+  white-space: normal;
+
+}
+
+:host /deep/ .string { color: red; }
+:host /deep/ .number { color: darkorange; }
+:host /deep/ .boolean { color: blue; }
+:host /deep/ .null { color: magenta; }
+:host /deep/ .key { color: black; }
