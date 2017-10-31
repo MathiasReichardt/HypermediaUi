@@ -9,23 +9,13 @@ import { SirenClientObject } from '../hypermedia-client.service';
   styleUrls: ['./hypermedia-control.component.scss']
 })
 export class HypermediaControlComponent implements OnInit {
-  public embeddedLinkEntities: EmbeddedLinkEntity[];
-  public embeddedEntities: EmbeddedEntity[];
-  public classes: string;
-  public links: HypermediaLink[] = new Array<HypermediaLink>();
-  public properties: PropertyInfo[]= new Array<PropertyInfo>();
-
-
+  public hto: SirenClientObject;
 
   constructor(private hypermediaClient: HypermediaClientService) {  }
 
   ngOnInit() {
       this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
-      this.classes = hto.classes.join(',');
-      this.links = hto.links;
-      this.properties = hto.properties;
-      this.embeddedLinkEntities = hto.embeddedLinkEntities;
-      this.embeddedEntities = hto.embeddedEntities;
+      this.hto = hto;
     });
 
     this.hypermediaClient.enterApi();

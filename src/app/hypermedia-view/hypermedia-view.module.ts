@@ -10,6 +10,7 @@ import {HypermediaClientService} from './hypermedia-client.service';
 import { PropertyGridComponent } from './property-grid/property-grid.component';
 import { LinkViewComponent } from './link-view/link-view.component';
 import { EmbeddedEntityViewComponent } from './embedded-entity-view/embedded-entity-view.component';
+import { EntityViewComponent } from './entity-view/entity-view.component';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { EmbeddedEntityViewComponent } from './embedded-entity-view/embedded-ent
   exports: [
     HypermediaControlComponent
   ],
-  declarations: [HypermediaControlComponent, PropertyGridComponent, LinkViewComponent, EmbeddedEntityViewComponent],
+  declarations: [HypermediaControlComponent, PropertyGridComponent, LinkViewComponent, EmbeddedEntityViewComponent, EntityViewComponent],
   providers: [HypermediaClientService]
 })
 export class HypermediaViewModule { }
