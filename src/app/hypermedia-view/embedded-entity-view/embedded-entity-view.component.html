@@ -14,7 +14,7 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <!-- <app-hypermedia-control></app-hypermedia-control> endless recursion-->
+          <app-entity-view [entity]="embeddedEntity"></app-entity-view>
 
         </mat-expansion-panel>
     <div class="warning" *ngIf="embeddedLinkEntities?.length !== 0">Warning: no Link Entities shown.</div>
