@@ -1,9 +1,10 @@
+<h3>{{title}}</h3>
 <mat-card>Classes: {{classes}}</mat-card>
 
 <app-property-grid [propertyContainer]="properties"></app-property-grid>
 
 <app-embedded-entity-view [embeddedEntities]="embeddedEntities" [embeddedLinkEntities]="embeddedLinkEntities"></app-embedded-entity-view>
 
-<mat-card>Actions</mat-card>
+<app-actions-view [actions]="actions"></app-actions-view>
 
 <app-link-view [links]="links"></app-link-view>

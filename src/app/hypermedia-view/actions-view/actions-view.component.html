@@ -1,0 +1,18 @@
+<mat-card>
+    <mat-card-title>
+      Actions ({{actions?.length}})
+    </mat-card-title>
+
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let action of actions">
+          <!-- todo make component -->
+          <div>name: {{action.name}}</div>
+          <div>title: {{action.title}}</div>
+          <br>
+
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+
+  </mat-card>

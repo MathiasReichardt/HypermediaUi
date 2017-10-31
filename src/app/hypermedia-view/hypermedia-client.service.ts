@@ -7,9 +7,9 @@ import { HttpClient as AngularHttpClient, HttpErrorResponse } from '@angular/com
 @Injectable()
 export class HypermediaClientService {
 
-  private entryPoint = 'http://localhost:5000/Customers/Query?Pagination.PageSize=4';
+  // private entryPoint = 'http://localhost:5000/Customers/Query?Pagination.PageSize=4';
   // private entryPoint = 'http://localhost:5000/entrypoint';
-  // private entryPoint = 'http://localhost:5000/Customers/1';
+  private entryPoint = 'http://localhost:5000/Customers/1';
 
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
@@ -55,7 +55,8 @@ export class SirenClientObject {
   properties: PropertyInfo[];
   embeddedLinkEntities: EmbeddedLinkEntity[];
   embeddedEntities: EmbeddedEntity[];
-  public title: string;
+  title: string;
+  actions: HypermediaAction[];
 
   constructor() { }
 
@@ -64,6 +65,8 @@ export class SirenClientObject {
     this.title = response.title;
     this.links = this.deserializeLinks(response.links); // todo what if undefined
     this.properties = this.deserializeProperties(response.properties);
+    this.actions = this.deserializeActions(response.actions);
+
 
     // todo preserve order of embeddedLinkEntitys and embeddedEntity, splitting types changes order
     this.embeddedLinkEntities = this.deserializeEmbeddedLinkEntity(response.entities);
@@ -113,6 +116,23 @@ export class SirenClientObject {
     const result = new Array<HypermediaLink>();
     links.forEach(link => {
       result.push(new HypermediaLink([...link.rel], link.href));
+    });
+
+    return result;
+  }
+
+  deserializeActions(actions: any[]): HypermediaAction[] {
+    const result = new Array<HypermediaAction>();
+    actions.forEach(action => {
+      const hypermediaAction = new HypermediaAction();
+      hypermediaAction.name = action.name;
+      hypermediaAction.classes = action.class;
+      hypermediaAction.method = action.method;
+      hypermediaAction.href = action.href;
+      hypermediaAction.title = action.title;
+      hypermediaAction.type = action.type;
+
+      result.push(action);
     });
 
     return result;
@@ -211,7 +231,26 @@ export enum PropertyTypes {
   array = 'array'
 }
 
+export enum HttpMethodTyes {
+  GET,
+  POST,
+  PUT,
+  DELETE,
+  OPTIONS
+}
+
 export class HypermediaLink {
   constructor(public relations: string[], public url: string) { }
+}
+
+export class HypermediaAction {
+  public name: string;
+  public classes: string[];
+  public method: HttpMethodTyes;
+  public href: string;
+  public title: string;
+  public type: string;
+
+  constructor() { }
 }
 
