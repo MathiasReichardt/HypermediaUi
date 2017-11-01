@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 import { MatCardModule } from '@angular/material';
-import { MatButtonModule, MatGridListModule, MatCheckboxModule, MatExpansionModule, MatTabsModule } from '@angular/material';
+import { MatButtonModule, MatGridListModule, MatCheckboxModule, MatExpansionModule, MatTabsModule, MatTooltipModule } from '@angular/material';
 import { PrettyJsonModule } from 'angular2-prettyjson';
 
 import { HypermediaControlComponent } from './hypermedia-control/hypermedia-control.component';
@@ -27,6 +27,7 @@ import { ParameterlessActionViewComponent } from './actions/parameterless-action
     MatCheckboxModule,
     MatExpansionModule,
     MatTabsModule,
+    MatTooltipModule,
     PrettyJsonModule
   ],
   exports: [

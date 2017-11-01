@@ -1,3 +1,4 @@
-<p>
-  parameterless-action-view works!
-</p>
+<button mat-raised-button (click)="executeAction()" matTooltip="{{action.title}}">
+{{action.name}}
+</button>
+<span>{{actionMessage}}</span>

@@ -1,8 +1,9 @@
+import { MockResponses } from './mockResponses';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { map } from 'rxjs/operators';
-import { HttpClient as AngularHttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient as AngularHttpClient, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 
 @Injectable()
 export class HypermediaClientService {
@@ -26,6 +27,8 @@ export class HypermediaClientService {
 
   enterApi() {
     this.httpClient.get(this.entryPoint).subscribe(response => { // TODO is subscribe ok here? use pipe?
+      // response = MockResponses.customerWithParameterlessAction; // MOCK
+
       const sirenClientObject = this.MapResponse(response);
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
@@ -38,6 +41,52 @@ export class HypermediaClientService {
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
     });
+  }
+
+  executeParameterlessAction(action: HypermediaAction, actionResult: (ActionResults, string?) => void): any {
+    switch (action.method) {
+      case HttpMethodTyes.POST:
+        this.httpClient.post(action.href, {}).subscribe(
+          response => { actionResult(ActionResults.ok, this.getErrorMessage(<HttpResponseBase>response)); },
+          error => {
+            actionResult(ActionResults.error, this.getErrorMessage(<HttpResponseBase>error));
+            // throw new Error('HypermediaClientService: Error in request: ' + (<HttpErrorResponse>error).message);
+          },
+          () => { actionResult(ActionResults.ok); }); // TODO on complete reload current entity?
+        break;
+
+      default: {
+        // TODO implement other methods
+        throw Error('Unsupported method used for execution action');
+      }
+
+    }
+  }
+
+  getErrorMessage(error: HttpResponseBase): any {
+    const statusCode = error.status;
+    let message;
+    if (statusCode >= 200 && statusCode < 300) {
+      message = 'Executed';
+    } else if (statusCode === 400) {
+      message = 'Bad Request';
+    } else if (statusCode === 401) {
+      message = 'Unauthorized';
+    } else if (statusCode === 403) {
+      message = 'Forbidden';
+    } else if (statusCode === 404) {
+      message = 'Action resource not found';
+    } else if (statusCode === 409) {
+      message = 'Resource has changed: conflict.';
+    } else if (statusCode >= 400 && statusCode < 500) {
+      message = 'Client error';
+    } else if (statusCode >= 500) {
+      message = 'Server error';
+    } else {
+      message = 'Unknown';
+    }
+
+    return message + ' [' + statusCode + ']';
   }
 
   private MapResponse(response: any): SirenClientObject {
@@ -147,7 +196,7 @@ export class SirenClientObject {
     return result;
   }
 
-  private getMethod(action: any): HttpMethodTyes  {
+  private getMethod(action: any): HttpMethodTyes {
     let method = HttpMethodTyes[<string>action.method];
 
     // default value for siren is GET
@@ -159,10 +208,10 @@ export class SirenClientObject {
   }
 
   deserializeActionParameters(action: any, hypermediaAction: HypermediaAction) {
-    if (!this.hasFilledArrayProperty(action, 'fields') && action.fields.length !== 0) {
-      hypermediaAction.isParameterLess = true;
-    } else {
+    if (this.hasFilledArrayProperty(action, 'fields') && action.fields.length !== 0) {
       hypermediaAction.isParameterLess = false;
+    } else {
+      hypermediaAction.isParameterLess = true;
     }
   }
 
@@ -287,8 +336,14 @@ export enum HttpMethodTyes {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
-  OPTIONS = 'OPTIONS',
   PATCH = 'PATCH'
+}
+
+export enum ActionResults {
+  undefined,
+  pending,
+  error,
+  ok
 }
 
 export class HypermediaLink {
