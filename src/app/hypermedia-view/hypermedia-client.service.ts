@@ -50,6 +50,7 @@ export class HypermediaClientService {
 
 export class SirenClientObject {
 
+
   classes: string[] = new Array<string>();
   links: HypermediaLink[] = new Array<HypermediaLink>();
   properties: PropertyInfo[];
@@ -128,19 +129,41 @@ export class SirenClientObject {
       const hypermediaAction = new HypermediaAction();
       hypermediaAction.name = action.name;
 
-      if (this.isStringArray(action, 'class')) {
+      if (this.hasFilledArrayProperty(action, 'class')) {
         hypermediaAction.classes = [...action.class];
       }
 
-      hypermediaAction.method = action.method;
+      hypermediaAction.method = this.getMethod(action);
+
       hypermediaAction.href = action.href;
       hypermediaAction.title = action.title;
       hypermediaAction.type = action.type;
+
+      this.deserializeActionParameters(action, hypermediaAction);
 
       result.push(hypermediaAction);
     });
 
     return result;
+  }
+
+  private getMethod(action: any): HttpMethodTyes  {
+    let method = HttpMethodTyes[<string>action.method];
+
+    // default value for siren is GET
+    if (!method) {
+      method = HttpMethodTyes.GET;
+    }
+
+    return method;
+  }
+
+  deserializeActionParameters(action: any, hypermediaAction: HypermediaAction) {
+    if (!this.hasFilledArrayProperty(action, 'fields') && action.fields.length !== 0) {
+      hypermediaAction.isParameterLess = true;
+    } else {
+      hypermediaAction.isParameterLess = false;
+    }
   }
 
   deserializeProperties(properties: any): PropertyInfo[] {
@@ -208,14 +231,13 @@ export class SirenClientObject {
     return false;
   }
 
-  private isStringArray(obj: object, propertyName: string): boolean {
+  private hasFilledArrayProperty(obj: object, propertyName: string): boolean {
     if (this.hasFilledProperty(obj, propertyName) && Array.isArray(obj[propertyName])) {
       return true;
     }
 
     return false;
   }
-
 
   private isEmbeddedLinkEntity(entity: any) {
     if (entity.hasOwnProperty('href')) {
@@ -261,11 +283,12 @@ export enum PropertyTypes {
 }
 
 export enum HttpMethodTyes {
-  GET,
-  POST,
-  PUT,
-  DELETE,
-  OPTIONS
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+  OPTIONS = 'OPTIONS',
+  PATCH = 'PATCH'
 }
 
 export class HypermediaLink {
@@ -279,6 +302,8 @@ export class HypermediaAction {
   public href: string;
   public title: string;
   public type: string;
+
+  public isParameterLess: boolean;
 
   constructor() { }
 }

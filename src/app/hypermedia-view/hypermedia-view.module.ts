@@ -14,6 +14,7 @@ import { EmbeddedEntityViewComponent } from './embedded-entity-view/embedded-ent
 import { EntityViewComponent } from './entity-view/entity-view.component';
 import { RawViewComponent } from './raw-view/raw-view.component';
 import { ActionsViewComponent } from './actions-view/actions-view.component';
+import { ParameterlessActionViewComponent } from './actions/parameterless-action-view/parameterless-action-view.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { ActionsViewComponent } from './actions-view/actions-view.component';
     EmbeddedEntityViewComponent,
     EntityViewComponent,
     RawViewComponent,
-    ActionsViewComponent],
+    ActionsViewComponent,
+    ParameterlessActionViewComponent],
   providers: [HypermediaClientService]
 })
 export class HypermediaViewModule { }
