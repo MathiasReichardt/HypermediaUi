@@ -123,16 +123,21 @@ export class SirenClientObject {
 
   deserializeActions(actions: any[]): HypermediaAction[] {
     const result = new Array<HypermediaAction>();
+
     actions.forEach(action => {
       const hypermediaAction = new HypermediaAction();
       hypermediaAction.name = action.name;
-      hypermediaAction.classes = action.class;
+
+      if (this.isStringArray(action, 'class')) {
+        hypermediaAction.classes = [...action.class];
+      }
+
       hypermediaAction.method = action.method;
       hypermediaAction.href = action.href;
       hypermediaAction.title = action.title;
       hypermediaAction.type = action.type;
 
-      result.push(action);
+      result.push(hypermediaAction);
     });
 
     return result;
@@ -187,6 +192,30 @@ export class SirenClientObject {
 
     return result;
   }
+
+  private hasProperty(obj: object, propertyName: string): boolean {
+    if (obj.hasOwnProperty(propertyName)) {
+      return true;
+    }
+    return false;
+  }
+
+  private hasFilledProperty(obj: object, propertyName: string): boolean {
+    if (this.hasProperty(obj, propertyName) && obj[propertyName]) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private isStringArray(obj: object, propertyName: string): boolean {
+    if (this.hasFilledProperty(obj, propertyName) && Array.isArray(obj[propertyName])) {
+      return true;
+    }
+
+    return false;
+  }
+
 
   private isEmbeddedLinkEntity(entity: any) {
     if (entity.hasOwnProperty('href')) {
@@ -245,7 +274,7 @@ export class HypermediaLink {
 
 export class HypermediaAction {
   public name: string;
-  public classes: string[];
+  public classes: string[] = new Array<string>();
   public method: HttpMethodTyes;
   public href: string;
   public title: string;

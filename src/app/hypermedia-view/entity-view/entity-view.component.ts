@@ -16,7 +16,7 @@ export class EntityViewComponent implements OnInit, OnChanges {
   public classes: string;
   public links: HypermediaLink[] = new Array<HypermediaLink>();
   public properties: PropertyInfo[] = new Array<PropertyInfo>();
-  public actions: HypermediaAction[];
+  public actions: HypermediaAction[]= new Array<HypermediaAction>();
 
   constructor() { }
 

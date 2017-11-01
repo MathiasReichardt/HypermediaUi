@@ -1,5 +1,5 @@
 import { HypermediaAction } from './../hypermedia-client.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-actions-view',
@@ -13,5 +13,4 @@ export class ActionsViewComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }
