@@ -8,9 +8,10 @@ export class GlobalErrorHandler implements ErrorHandler {
   handleError(error: any) {
     console.error(error);
 
-    // Replace 'if instanceof ...' stuff with a mapping when we decided how to render and translate errors.
-
-    const message = 'An error occurred.';
+    let  message = 'An error occurred.';
+    if (error.message) {
+      message = error.message;
+    }
 
     this.errorDialog.open('Uuups!', message, 'warn');
   }
