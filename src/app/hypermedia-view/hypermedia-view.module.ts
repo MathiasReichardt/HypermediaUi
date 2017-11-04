@@ -6,6 +6,10 @@ import { MatCardModule } from '@angular/material';
 import { MatButtonModule, MatGridListModule, MatCheckboxModule, MatExpansionModule, MatTabsModule, MatTooltipModule } from '@angular/material';
 import { PrettyJsonModule } from 'angular2-prettyjson';
 
+import { JsonSchemaFormModule } from 'angular2-json-schema-form';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatInputModule, MatSelectModule } from '@angular/material';
+
 import { HypermediaControlComponent } from './hypermedia-control/hypermedia-control.component';
 import { HypermediaClientService } from './hypermedia-client.service';
 import { PropertyGridComponent } from './property-grid/property-grid.component';
@@ -28,6 +32,10 @@ import { ParameterlessActionViewComponent } from './actions/parameterless-action
     MatExpansionModule,
     MatTabsModule,
     MatTooltipModule,
+    FlexLayoutModule,
+    MatInputModule,
+    MatSelectModule,
+    JsonSchemaFormModule,
     PrettyJsonModule
   ],
   exports: [

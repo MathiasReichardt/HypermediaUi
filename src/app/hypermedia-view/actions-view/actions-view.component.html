@@ -15,8 +15,11 @@
               <div>name: {{action.name}} (with parameters)</div>
               <div>title: {{action.title}}</div>
               <div>classes: {{action.classes.join(",")}}</div>
-              <div>schema: {{action.waheActionParameterJsonSchema}}</div>
+              <!-- <div>schema: {{action.waheActionParameterJsonSchema}}</div> -->
               <br>
+              <json-schema-form [schema]="action.waheActionParameterJsonSchema">
+              <!-- (onSubmit)="onActionSubmitted($event)" -->
+              </json-schema-form>
           </ng-template>
 
 

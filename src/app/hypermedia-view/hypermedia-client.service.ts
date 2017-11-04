@@ -9,8 +9,8 @@ import { HttpClient as AngularHttpClient, HttpErrorResponse, HttpResponseBase } 
 export class HypermediaClientService {
 
   // private entryPoint = 'http://localhost:5000/Customers/Query?Pagination.PageSize=4';
-  // private entryPoint = 'http://localhost:5000/entrypoint';
-  private entryPoint = 'http://localhost:5000/Customers/1';
+  private entryPoint = 'http://localhost:5000/entrypoint';
+  // private entryPoint = 'http://localhost:5000/Customers/1';
 
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject(this.httpClient));
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
@@ -28,7 +28,7 @@ export class HypermediaClientService {
 
   enterApi() {
     this.httpClient.get(this.entryPoint).subscribe(response => {
-      response = MockResponses.customerWithParameterlessAction; // MOCK
+      // response = MockResponses.customerWithParameterlessAction; // MOCK
 
       const sirenClientObject = this.MapResponse(response);
       this.currentClientObject$.next(sirenClientObject);
@@ -243,14 +243,15 @@ export class SirenClientObject {
     }
 
     // todo find better solution ASYNC
-    hypermediaAction.waheActionParameterJsonSchema = null;
+    hypermediaAction.waheActionParameterJsonSchema = {};
     this.getActionParameterJsonSchema(hypermediaAction.waheActionParameterClasses[0], hypermediaAction);
 
   }
 
-  getActionParameterJsonSchema(schemaUrl: string, hypermediaAction: HypermediaAction){
-    this.httpClient.get(schemaUrl).subscribe( (response: Response) => {
-      hypermediaAction.waheActionParameterJsonSchema = JSON.stringify(response);
+  // todo handle error
+  getActionParameterJsonSchema(schemaUrl: string, hypermediaAction: HypermediaAction) {
+    this.httpClient.get(schemaUrl).subscribe( (response: object) => {
+      hypermediaAction.waheActionParameterJsonSchema = response;
     });
   }
 
@@ -400,7 +401,7 @@ export class HypermediaAction {
   public isParameterLess: boolean;
   public waheActionParameterName: string;
   public waheActionParameterClasses: string[];
-  public waheActionParameterJsonSchema: string;
+  public waheActionParameterJsonSchema: object;
 
   constructor() { }
 }
