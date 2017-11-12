@@ -219,15 +219,11 @@ export class SirenClientObject {
       return;
     } else {
       hypermediaAction.isParameterLess = false;
-
-
-
-      this.parsWaheStyleParameters(action, hypermediaAction);
-
+      this.parseWaheStyleParameters(action, hypermediaAction);
     }
   }
 
-  parsWaheStyleParameters(action: any, hypermediaAction: HypermediaAction) {
+  parseWaheStyleParameters(action: any, hypermediaAction: HypermediaAction) {
     if (!this.hasProperty(action, 'type') || action.type !== this.waheActionType) {
       throw new Error(`Only suporting actions with type="${this.waheActionType}". [action ${action.name}]`); // todo pars standard siren
     }

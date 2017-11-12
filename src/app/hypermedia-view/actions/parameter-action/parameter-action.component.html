@@ -1,0 +1,8 @@
+<h2>{{action.name}}: {{action.title}} </h2>
+<!-- <div>classes: {{action.classes.join(",")}}</div> -->
+<!-- <div>schema: {{action.waheActionParameterJsonSchema}}</div> -->
+
+<json-schema-form [schema]="action.waheActionParameterJsonSchema"></json-schema-form>
+
+<!-- (onSubmit)="onActionSubmitted($event)" -->
+<!-- <app-raw-view [rawObject]="action.waheActionParameterJsonSchema"></app-raw-view> -->

@@ -19,6 +19,7 @@ import { EntityViewComponent } from './entity-view/entity-view.component';
 import { RawViewComponent } from './raw-view/raw-view.component';
 import { ActionsViewComponent } from './actions-view/actions-view.component';
 import { ParameterlessActionViewComponent } from './actions/parameterless-action-view/parameterless-action-view.component';
+import { ParameterActionComponent } from './actions/parameter-action/parameter-action.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { ParameterlessActionViewComponent } from './actions/parameterless-action
     EntityViewComponent,
     RawViewComponent,
     ActionsViewComponent,
-    ParameterlessActionViewComponent],
+    ParameterlessActionViewComponent,
+    ParameterActionComponent],
   providers: [HypermediaClientService]
 })
 export class HypermediaViewModule { }
