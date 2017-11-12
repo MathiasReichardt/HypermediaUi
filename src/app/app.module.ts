@@ -3,11 +3,13 @@ import { HypermediaControlComponent } from './hypermedia-view/hypermedia-control
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { ErrorDialogModule } from './error-dialog/error-dialog.module';
 
 import { AppComponent } from './app.component';
 import { LinkViewComponent } from './hypermedia-view/link-view/link-view.component';
+import { EmptyResponseBodyErrorInterceptor } from './HttpInterceptorWorkaround';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,11 @@ import { LinkViewComponent } from './hypermedia-view/link-view/link-view.compone
     ErrorDialogModule,
     HypermediaViewModule,
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: EmptyResponseBodyErrorInterceptor,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
