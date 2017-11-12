@@ -3,13 +3,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
+import { findAll, find, get, where, replace } from 'simple-object-query';
 import { HttpClient as AngularHttpClient, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
+
 
 @Injectable()
 export class HypermediaClientService {
 
-  // private entryPoint = 'http://localhost:5000/Customers/Query?Pagination.PageSize=4';
-  private entryPoint = 'http://localhost:5000/entrypoint';
+  // private entryPoint = 'http://localhost:5000/Customers/Query';
+  private entryPoint = 'http://localhost:5000/Customers';
+  // private entryPoint = 'http://localhost:5000/entrypoint';
   // private entryPoint = 'http://localhost:5000/Customers/1';
 
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject(this.httpClient));
@@ -99,6 +102,7 @@ export class HypermediaClientService {
 
 // todo extract deserializer
 export class SirenClientObject {
+
   private readonly waheActionType = 'application/json';
 
   classes: string[] = new Array<string>();
@@ -242,17 +246,171 @@ export class SirenClientObject {
       throw new Error(`Action field may only contain one class. [action ${action.name}]`);
     }
 
-    // todo find better solution ASYNC
-    hypermediaAction.waheActionParameterJsonSchema = {};
-    this.getActionParameterJsonSchema(hypermediaAction.waheActionParameterClasses[0], hypermediaAction);
+    hypermediaAction.waheActionParameterJsonSchema = {
+      title: 'empty',
+      type: 'object',
+      properties: {}
+    };
 
+    this.getActionParameterJsonSchema(hypermediaAction.waheActionParameterClasses[0], hypermediaAction);
   }
 
   // todo handle error
   getActionParameterJsonSchema(schemaUrl: string, hypermediaAction: HypermediaAction) {
-    this.httpClient.get(schemaUrl).subscribe( (response: object) => {
+    this.httpClient.get(schemaUrl).subscribe((response: object) => {
+      this.simplifySchema(response);
       hypermediaAction.waheActionParameterJsonSchema = response;
+    }
+    );
+  }
+
+  simplifySchema(response: any) {
+    // normalize schema so ui component can render propperly, if component improves this may be vanish:
+    // sub schemas, definitions + ref: not resolved
+    // format: unknown "int32", "int64"
+    // oneOf: not handled-> will not show
+
+    this.resolveLocalReferences(response);
+    this.fixNullablesInOneOf(response);
+    this.flatenOneOf(response);
+    this.fixUnknownFormats(response);
+  }
+
+  fixUnknownFormats(object: any) {
+    for (const propertyName in object) {
+      if (!object.hasOwnProperty(propertyName)) {
+        continue;
+      }
+
+      if (propertyName === 'format' && (object[propertyName] === 'int32' || object[propertyName] === 'int64')) {
+        delete object[propertyName];
+      }
+
+      // recursion
+      if (typeof (object[propertyName]) === 'object') {
+        this.fixUnknownFormats(object[propertyName]);
+      }
+
+    }
+  }
+
+  flatenOneOf(schema: any) {
+    const properties = schema.properties;
+    if (!properties) {
+      return;
+    }
+
+    for (const propertyName in properties) {
+      if (!properties.hasOwnProperty(propertyName)) {
+        continue;
+      }
+
+      const oneOf = properties[propertyName].oneOf;
+      if (oneOf && Array.isArray(oneOf)) {
+        if (oneOf.length > 1) {
+          throw new Error('Can not flatten oneOf in schema because mre than one element remaining.');
+        }
+
+        const containedSchema = oneOf[0];
+        delete properties[propertyName].oneOf;
+        if (!containedSchema) {
+          continue;
+        }
+
+        properties[propertyName] = containedSchema;
+
+        // recursion
+        this.flatenOneOf(properties[propertyName]);
+      }
+    }
+
+  }
+
+  fixNullablesInOneOf(schema: any) {
+    const properties = schema.properties;
+    if (!properties) {
+      return;
+    }
+
+    for (const propertyName in properties) {
+      if (!properties.hasOwnProperty(propertyName)) {
+        continue;
+      }
+
+      const oneOf = properties[propertyName].oneOf;
+      if (oneOf && Array.isArray(oneOf)) {
+        this.removeNullType(oneOf);
+
+        // recursion
+        oneOf.forEach(element => {
+          this.fixNullablesInOneOf(element);
+        });
+      }
+    }
+  }
+
+  removeNullType(oneOf: Array<any>) {
+    let nullTypeCount = 0;
+    let nullTypeItemIndex = -1;
+    let index = 0;
+    oneOf.forEach(item => {
+      const type = item.type;
+      if (type && type === 'null') {
+        nullTypeCount++;
+        nullTypeItemIndex = index;
+      }
+      index++;
     });
+
+    if (nullTypeCount > 1) {
+      throw new Error(`Too much null types in schema (${nullTypeCount})`);
+    }
+
+    if (nullTypeItemIndex === -1) {
+      return;
+    }
+
+    oneOf.splice(nullTypeItemIndex, 1);
+  }
+
+  private resolveLocalReferences(schema: any) {
+    const foundRefsArrays = <Array<any>>find(schema, {
+      'oneOf': /\.*/
+    });
+
+    foundRefsArrays.forEach(element => {
+      const elemetsToRemove = [];
+      element.oneOf.forEach(one => {
+        if (this.hasProperty(one, '$ref')) {
+          const definitionKey = (<string>one.$ref).replace('#/definitions/', '');
+          const replacement = schema.definitions[definitionKey];
+          if (!replacement) {
+            throw new Error(`Can not resolve schema reference: ${one.$ref}`);
+          }
+          element.oneOf.push(schema.definitions[definitionKey]);
+          elemetsToRemove.push(one);
+        }
+
+       elemetsToRemove.forEach(e => {
+         const index = element.oneOf.indexOf(e);
+         if (index >= 0) {
+          element.oneOf.splice(index, 1);
+         }
+
+       });
+      });
+    });
+
+    // recursion, migth have replaced ref with a subschema which contains a ref.
+    const remainingRefs = <Array<any>>find(schema, {
+      '$ref': /\.*/
+    });
+    if (remainingRefs.length !== 0) {
+      this.resolveLocalReferences(schema);
+    }
+
+    delete schema.definitions;
+    return;
   }
 
   deserializeProperties(properties: any): PropertyInfo[] {
