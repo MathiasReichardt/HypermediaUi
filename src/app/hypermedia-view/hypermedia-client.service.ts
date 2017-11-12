@@ -4,15 +4,15 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import { findAll, find, get, where, replace } from 'simple-object-query';
-import { HttpClient as AngularHttpClient, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
+import { HttpClient as AngularHttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
 
 
 @Injectable()
 export class HypermediaClientService {
 
+  // private entryPoint = 'http://localhost:5000/entrypoint';
   // private entryPoint = 'http://localhost:5000/Customers/Query';
   private entryPoint = 'http://localhost:5000/Customers';
-  // private entryPoint = 'http://localhost:5000/entrypoint';
   // private entryPoint = 'http://localhost:5000/Customers/1';
 
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject(this.httpClient));
@@ -31,8 +31,6 @@ export class HypermediaClientService {
 
   enterApi() {
     this.httpClient.get(this.entryPoint).subscribe(response => {
-      // response = MockResponses.customerWithParameterlessAction; // MOCK
-
       const sirenClientObject = this.MapResponse(response);
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
@@ -66,6 +64,74 @@ export class HypermediaClientService {
 
     }
   }
+
+  createWaheStyleActeionParameters(action: HypermediaAction): any {
+    if (action.parameters === null) {
+      throw new Error(`Action requires parameters but got none. ${action}`);
+    }
+
+    const parameters = new Array<any>();
+    const internalObject = {};
+    internalObject[action.waheActionParameterName] = action.parameters;
+    parameters.push(internalObject);
+
+    return parameters;
+  }
+
+  executeAction(action: HypermediaAction, actionResult: (actionResults: ActionResults, resultLocation, content, string?) => void): any {
+    const parameters = this.createWaheStyleActeionParameters(action);
+
+
+    switch (action.method) {
+      case HttpMethodTyes.POST:
+        console.log('ACTION');
+        this.httpClient.post(
+          action.href,
+          parameters,
+          {
+            headers: new HttpHeaders()
+              .set('Content-Type', 'application/json')
+              .set('Accept', 'application/json'),
+          })
+          .subscribe(
+
+          (response: HttpResponse<any>) => {
+            console.log('Success');
+            actionResult(ActionResults.ok, 'fix me', '', '');
+            // const location = response.headers.get('Location'); // workaround does not cotain this header
+
+            // console.log('Loc: ' + location);
+            // actionResult(ActionResults.ok, location, response.body, this.getErrorMessage(response));
+          },
+
+          (error: HttpErrorResponse) => {
+            if (error.error instanceof Error) {
+              // A client-side or network error occurred. Handle it accordingly.
+              console.log('An error occurred:', error.error.message);
+            } else {
+              console.log('Server error');
+            }
+
+            console.log('ERROR: ' + JSON.stringify(error));
+
+            const location = error.headers.get('Location');
+            console.log('Loc: ' + location);
+            actionResult(ActionResults.error, location, 'No error body parsed', this.getErrorMessage(error)); // TODO process ProblemJson in body
+          },
+
+          () => {
+             // TODO on complete reload current entity?
+          });
+        break;
+
+      default: {
+        // TODO implement other methods
+        throw Error('Unsupported method used for execution action');
+      }
+
+    }
+  }
+
 
   getErrorMessage(error: HttpResponseBase): any {
     const statusCode = error.status;
@@ -242,6 +308,11 @@ export class SirenClientObject {
       throw new Error(`Action field may only contain one class. [action ${action.name}]`);
     }
 
+    if (!action.fields[0].name) {
+      throw new Error(`Action field must contain a name. [action ${action.name}]`);
+    }
+    hypermediaAction.waheActionParameterName = action.fields[0].name;
+
     hypermediaAction.waheActionParameterJsonSchema = {
       title: 'empty',
       type: 'object',
@@ -387,13 +458,13 @@ export class SirenClientObject {
           elemetsToRemove.push(one);
         }
 
-       elemetsToRemove.forEach(e => {
-         const index = element.oneOf.indexOf(e);
-         if (index >= 0) {
-          element.oneOf.splice(index, 1);
-         }
+        elemetsToRemove.forEach(e => {
+          const index = element.oneOf.indexOf(e);
+          if (index >= 0) {
+            element.oneOf.splice(index, 1);
+          }
 
-       });
+        });
       });
     });
 
@@ -556,6 +627,7 @@ export class HypermediaAction {
   public waheActionParameterName: string;
   public waheActionParameterClasses: string[];
   public waheActionParameterJsonSchema: object;
+  public parameters: string;
 
   constructor() { }
 }

@@ -2,7 +2,14 @@
 <!-- <div>classes: {{action.classes.join(",")}}</div> -->
 <!-- <div>schema: {{action.waheActionParameterJsonSchema}}</div> -->
 
-<json-schema-form [schema]="action.waheActionParameterJsonSchema"></json-schema-form>
+<span>{{actionMessage}}</span>
 
-<!-- (onSubmit)="onActionSubmitted($event)" -->
+<button *ngIf="actionResultLocation !== null" mat-raised-button (click)="navigateLocation(actionResultLocation)">
+  Action result {{actionResultLocation}}
+</button>
+
+<!-- todo if contains body show it / navigate to it -->
+
+<json-schema-form [schema]="action.waheActionParameterJsonSchema" (onSubmit)="onActionSubmitted($event)"></json-schema-form>
+
 <!-- <app-raw-view [rawObject]="action.waheActionParameterJsonSchema"></app-raw-view> -->

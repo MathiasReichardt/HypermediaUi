@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HypermediaAction } from '../../hypermedia-client.service';
+import { HypermediaAction, ActionResults, HypermediaClientService } from '../../hypermedia-client.service';
 
 @Component({
   selector: 'app-parameter-action',
@@ -9,9 +9,37 @@ import { HypermediaAction } from '../../hypermedia-client.service';
 export class ParameterActionComponent implements OnInit {
   @Input() action: HypermediaAction;
 
-  constructor() { }
+  actionResult: ActionResults;
+  actionMessage: string;
+  actionResultLocation: string = null;
+  actionResultBody: string;
+
+  constructor(private hypermediaClientService: HypermediaClientService) { }
 
   ngOnInit() {
   }
 
+  public onActionSubmitted(formParameters: any) {
+    this.action.parameters = formParameters;
+    console.log(formParameters);
+
+    this.hypermediaClientService.executeAction(this.action, (result: ActionResults, resultLocation: string, content: string, message?: string) => {
+      this.actionResult = result;
+
+      if (message) {
+        this.actionMessage = message;
+      } else {
+        this.actionMessage = '';
+      }
+
+      // todo handle if has content AND location
+      this.actionResultLocation = resultLocation;
+      this.actionResultBody = resultLocation;
+
+    });
+  }
+
+  navigateLocation(location: string) {
+    this.hypermediaClientService.Navigate(location);
+  }
 }
