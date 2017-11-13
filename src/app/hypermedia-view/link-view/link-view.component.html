@@ -6,7 +6,7 @@
   <mat-card-content>
     <mat-list>
       <mat-list-item *ngFor="let link of links">
-        <button mat-raised-button (click)="navigateLink(link)">
+        <button mat-raised-button (click)="navigateLink(link)" matTooltip="{{link.url}}">
           {{link.relations.join(',')}}
         </button>
       </mat-list-item>

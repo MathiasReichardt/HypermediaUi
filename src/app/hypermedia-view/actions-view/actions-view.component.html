@@ -11,17 +11,8 @@
             <app-parameterless-action-view [action]=action></app-parameterless-action-view>
           </ng-container>
           <ng-template #parameterActionTemplate>
-             <!-- todo make component -->
-              <div>name: {{action.name}} (with parameters)</div>
-              <div>title: {{action.title}}</div>
-              <div>classes: {{action.classes.join(",")}}</div>
-              <div>schema: {{action.waheActionParameterJsonSchema}}</div>
-              <br>
+              <app-parameter-action [action]=action></app-parameter-action>
           </ng-template>
-
-
-
-
         </mat-list-item>
       </mat-list>
     </mat-card-content>
