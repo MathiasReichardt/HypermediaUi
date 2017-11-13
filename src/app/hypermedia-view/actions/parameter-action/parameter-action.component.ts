@@ -21,7 +21,6 @@ export class ParameterActionComponent implements OnInit {
 
   public onActionSubmitted(formParameters: any) {
     this.action.parameters = formParameters;
-    console.log(formParameters);
 
     this.hypermediaClientService.executeAction(this.action, (result: ActionResults, resultLocation: string, content: string, message?: string) => {
       this.actionResult = result;

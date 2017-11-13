@@ -81,27 +81,22 @@ export class HypermediaClientService {
   executeAction(action: HypermediaAction, actionResult: (actionResults: ActionResults, resultLocation, content, string?) => void): any {
     const parameters = this.createWaheStyleActeionParameters(action);
 
-
+    // todo if action responds with a action resource, process body
     switch (action.method) {
       case HttpMethodTyes.POST:
-        console.log('ACTION');
         this.httpClient.post(
           action.href,
           parameters,
           {
-            headers: new HttpHeaders()
-              .set('Content-Type', 'application/json')
-              .set('Accept', 'application/json'),
-          })
+            // can not use std http client due to bug: https://github.com/angular/angular/issues/18680
+            // 'Location' header will not be contained
+            observe: 'response',
+          }
+        )
           .subscribe(
-
           (response: HttpResponse<any>) => {
-            console.log('Success');
-            actionResult(ActionResults.ok, 'fix me', '', '');
-            // const location = response.headers.get('Location'); // workaround does not cotain this header
-
-            // console.log('Loc: ' + location);
-            // actionResult(ActionResults.ok, location, response.body, this.getErrorMessage(response));
+            const location = response.headers.get('Location');
+            actionResult(ActionResults.ok, location, response.body, this.getErrorMessage(response));
           },
 
           (error: HttpErrorResponse) => {
@@ -112,15 +107,13 @@ export class HypermediaClientService {
               console.log('Server error');
             }
 
-            console.log('ERROR: ' + JSON.stringify(error));
-
-            const location = error.headers.get('Location');
-            console.log('Loc: ' + location);
-            actionResult(ActionResults.error, location, 'No error body parsed', this.getErrorMessage(error)); // TODO process ProblemJson in body
+            // TODO HttpClient does not send a error object.
+            console.log('error migth not match, sending 500');
+            actionResult(ActionResults.error, null, 'No error body parsed', this.getErrorMessage(new HttpErrorResponse({status: 500}))); // TODO process ProblemJson in body
           },
 
           () => {
-             // TODO on complete reload current entity?
+            // TODO on complete reload current entity?
           });
         break;
 

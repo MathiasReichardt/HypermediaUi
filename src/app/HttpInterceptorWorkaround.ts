@@ -17,12 +17,6 @@ export class EmptyResponseBodyErrorInterceptor implements HttpInterceptor {
     return next.handle(req)
       .catch((err: HttpErrorResponse) => {
         if (err.status >= 200 && err.status < 300) {
-          console.log('INTERCEPTOR');
-          console.log(err.headers);
-          console.log(err.status);
-          console.log(err.statusText);
-          console.log(err.url);
-          console.log('INTERCEPTOR done');
           const res = new HttpResponse({
             body: null,
             headers: err.headers,
@@ -30,7 +24,6 @@ export class EmptyResponseBodyErrorInterceptor implements HttpInterceptor {
             statusText: err.statusText,
             url: err.url
           });
-
           return Observable.of(res);
         } else {
           return Observable.throw(err);
