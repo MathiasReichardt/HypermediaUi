@@ -49,9 +49,9 @@ export class HypermediaClientService {
     switch (action.method) {
       case HttpMethodTyes.POST:
         this.httpClient.post(action.href, {}).subscribe(
-          response => { actionResult(ActionResults.ok, this.getErrorMessage(<HttpResponseBase>response)); },
+          response => { actionResult(ActionResults.ok, this.getStatusMessage((<HttpResponseBase>response).status)); },
           error => {
-            actionResult(ActionResults.error, this.getErrorMessage(<HttpResponseBase>error)); // TODO process ProblemJson
+            actionResult(ActionResults.error, this.getStatusMessage((<HttpResponseBase>error).status)); // TODO process ProblemJson
             // throw new Error('HypermediaClientService: Error in request: ' + (<HttpErrorResponse>error).message);
           },
           () => { actionResult(ActionResults.ok); }); // TODO on complete reload current entity?
@@ -84,37 +84,44 @@ export class HypermediaClientService {
     // todo if action responds with a action resource, process body
     switch (action.method) {
       case HttpMethodTyes.POST:
-        this.httpClient.post(
-          action.href,
-          parameters,
-          {
-            // can not use std http client due to bug: https://github.com/angular/angular/issues/18680
-            // 'Location' header will not be contained
-            observe: 'response',
-          }
-        )
-          .subscribe(
-          (response: HttpResponse<any>) => {
-            const location = response.headers.get('Location');
-            actionResult(ActionResults.ok, location, response.body, this.getErrorMessage(response));
-          },
-
-          (error: HttpErrorResponse) => {
-            if (error.error instanceof Error) {
-              // A client-side or network error occurred. Handle it accordingly.
-              console.log('An error occurred:', error.error.message);
-            } else {
-              console.log('Server error');
+        this.httpClient
+          .post(
+            action.href,
+            parameters,
+            {
+              // can not use std http client due to bug: https://github.com/angular/angular/issues/18680
+              // 'Location' header will not be contained
+              observe: 'response',
             }
+          )
+          .subscribe(
+            (response: HttpResponse<any>) => {
+              const location = response.headers.get('Location');
+              if (!response.headers || location === null) {
+                console.log('No location header was in response for action.');
+                actionResult(ActionResults.ok, null, response.body, this.getStatusMessage(response.status));
+              }
 
-            // TODO HttpClient does not send a error object.
-            console.log('error migth not match, sending 500');
-            actionResult(ActionResults.error, null, 'No error body parsed', this.getErrorMessage(new HttpErrorResponse({status: 500}))); // TODO process ProblemJson in body
-          },
+              actionResult(ActionResults.ok, location, response.body, this.getStatusMessage(response.status));
+            },
+            (errorResponse: HttpErrorResponse) => {
+              let errorMessage = '';
+              if (errorResponse.error instanceof Error) {
+                // A client-side or network error occurred
+                console.log('An error occurred:', errorResponse.error.message);
+                errorMessage = this.getStatusMessage(-1);
+              } else {
+                console.log('Server error', errorResponse);
+                errorMessage = this.getStatusMessage(errorResponse.status);
+              }
 
-          () => {
-            // TODO on complete reload current entity?
-          });
+              actionResult(ActionResults.error, null, errorResponse.error, errorMessage); // TODO process ProblemJson in body
+            },
+
+            () => {
+              // TODO on complete reload current entity?
+            }
+          );
         break;
 
       default: {
@@ -126,8 +133,7 @@ export class HypermediaClientService {
   }
 
 
-  getErrorMessage(error: HttpResponseBase): any {
-    const statusCode = error.status;
+  getStatusMessage(statusCode: number): any {
     let message;
     if (statusCode >= 200 && statusCode < 300) {
       message = 'Executed';
@@ -145,6 +151,8 @@ export class HypermediaClientService {
       message = 'Client error';
     } else if (statusCode >= 500) {
       message = 'Server error';
+    } else if (statusCode === -1) {
+      message = 'Client error';
     } else {
       message = 'Unknown';
     }
