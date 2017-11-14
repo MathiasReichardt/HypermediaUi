@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
 
+import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 
