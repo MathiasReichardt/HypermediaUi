@@ -1,3 +1,4 @@
+import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -52,6 +53,6 @@ import { ParameterActionComponent } from './actions/parameter-action/parameter-a
     ActionsViewComponent,
     ParameterlessActionViewComponent,
     ParameterActionComponent],
-  providers: [HypermediaClientService]
+  providers: [HypermediaClientService, ObservableLruCache]
 })
 export class HypermediaViewModule { }

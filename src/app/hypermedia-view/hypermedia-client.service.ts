@@ -3,8 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
+
 import { findAll, find, get, where, replace } from 'simple-object-query';
 import { HttpClient as AngularHttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { ObservableLruCache } from './api-access/observable-lru-cache';
 
 
 @Injectable()
@@ -15,11 +17,11 @@ export class HypermediaClientService {
   private entryPoint = 'http://localhost:5000/Customers';
   // private entryPoint = 'http://localhost:5000/Customers/1';
 
-  private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject(this.httpClient));
+  private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject(this.httpClient, this.schemaCache));
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
 
 
-  constructor(private httpClient: AngularHttpClient) { }
+  constructor(private httpClient: AngularHttpClient, private schemaCache: ObservableLruCache<object>) { }
 
   getHypermediaObjectStream(): BehaviorSubject<SirenClientObject> {
     return this.currentClientObject$;
@@ -86,41 +88,41 @@ export class HypermediaClientService {
       case HttpMethodTyes.POST:
         this.httpClient
           .post(
-            action.href,
-            parameters,
-            {
-              // can not use std http client due to bug: https://github.com/angular/angular/issues/18680
-              // 'Location' header will not be contained
-              observe: 'response',
-            }
+          action.href,
+          parameters,
+          {
+            // can not use std http client due to bug: https://github.com/angular/angular/issues/18680
+            // 'Location' header will not be contained
+            observe: 'response',
+          }
           )
           .subscribe(
-            (response: HttpResponse<any>) => {
-              const location = response.headers.get('Location');
-              if (!response.headers || location === null) {
-                console.log('No location header was in response for action.');
-                actionResult(ActionResults.ok, null, response.body, this.getStatusMessage(response.status));
-              }
-
-              actionResult(ActionResults.ok, location, response.body, this.getStatusMessage(response.status));
-            },
-            (errorResponse: HttpErrorResponse) => {
-              let errorMessage = '';
-              if (errorResponse.error instanceof Error) {
-                // A client-side or network error occurred
-                console.log('An error occurred:', errorResponse.error.message);
-                errorMessage = this.getStatusMessage(-1);
-              } else {
-                console.log('Server error', errorResponse);
-                errorMessage = this.getStatusMessage(errorResponse.status);
-              }
-
-              actionResult(ActionResults.error, null, errorResponse.error, errorMessage); // TODO process ProblemJson in body
-            },
-
-            () => {
-              // TODO on complete reload current entity?
+          (response: HttpResponse<any>) => {
+            const location = response.headers.get('Location');
+            if (!response.headers || location === null) {
+              console.log('No location header was in response for action.');
+              actionResult(ActionResults.ok, null, response.body, this.getStatusMessage(response.status));
             }
+
+            actionResult(ActionResults.ok, location, response.body, this.getStatusMessage(response.status));
+          },
+          (errorResponse: HttpErrorResponse) => {
+            let errorMessage = '';
+            if (errorResponse.error instanceof Error) {
+              // A client-side or network error occurred
+              console.log('An error occurred:', errorResponse.error.message);
+              errorMessage = this.getStatusMessage(-1);
+            } else {
+              console.log('Server error', errorResponse);
+              errorMessage = this.getStatusMessage(errorResponse.status);
+            }
+
+            actionResult(ActionResults.error, null, errorResponse.error, errorMessage); // TODO process ProblemJson in body
+          },
+
+          () => {
+            // TODO on complete reload current entity?
+          }
           );
         break;
 
@@ -161,7 +163,7 @@ export class HypermediaClientService {
   }
 
   private MapResponse(response: any): SirenClientObject {
-    const hco = new SirenClientObject(this.httpClient);
+    const hco = new SirenClientObject(this.httpClient, this.schemaCache);
     hco.deserialize(response);
     return hco;
   }
@@ -180,7 +182,7 @@ export class SirenClientObject {
   title: string;
   actions: HypermediaAction[];
 
-  constructor(private httpClient: AngularHttpClient) { } // todo remove this http client! also add a chache for schemas
+  constructor(private httpClient: AngularHttpClient, private schemaCache: ObservableLruCache<object>) { } // todo remove this http client! also add a chache for schemas
 
   deserialize(response: any) {
     this.classes = [...(<string[]>response.class)]; // todo what if undefined
@@ -203,7 +205,7 @@ export class SirenClientObject {
         return;
       }
 
-      const linkEntity = new EmbeddedLinkEntity(this.httpClient);
+      const linkEntity = new EmbeddedLinkEntity(this.httpClient, this.schemaCache);
       linkEntity.href = entity.href;           // todo what if not there
       linkEntity.relations = [...entity.rel];
       linkEntity.classes = [...entity.class];
@@ -225,7 +227,7 @@ export class SirenClientObject {
         return;
       }
 
-      const embeddedEntity = new EmbeddedEntity(this.httpClient);
+      const embeddedEntity = new EmbeddedEntity(this.httpClient, this.schemaCache);
       embeddedEntity.relations = [...entity.rel];  // todo what if not there
       embeddedEntity.deserialize(entity);
       result.push(embeddedEntity);
@@ -314,22 +316,25 @@ export class SirenClientObject {
     }
     hypermediaAction.waheActionParameterName = action.fields[0].name;
 
-    hypermediaAction.waheActionParameterJsonSchema = {
-      title: 'empty',
-      type: 'object',
-      properties: {}
-    };
-
     this.getActionParameterJsonSchema(hypermediaAction.waheActionParameterClasses[0], hypermediaAction);
   }
 
   // todo handle error
   getActionParameterJsonSchema(schemaUrl: string, hypermediaAction: HypermediaAction) {
-    this.httpClient.get(schemaUrl).subscribe((response: object) => {
-      this.simplifySchema(response);
-      hypermediaAction.waheActionParameterJsonSchema = response;
+    const cached = this.schemaCache.getItem(schemaUrl);
+    if (cached) {
+      hypermediaAction.waheActionParameterJsonSchema = cached;
+      return;
     }
-    );
+
+    const simplifiedResponse$ = this.httpClient.get(schemaUrl)
+    .map(response => {
+      this.simplifySchema(response);
+      return response;
+    });
+
+    const cachedResponse = this.schemaCache.addItem(schemaUrl, simplifiedResponse$);
+    hypermediaAction.waheActionParameterJsonSchema = cachedResponse;
   }
 
   simplifySchema(response: any) {
@@ -570,8 +575,8 @@ export class EmbeddedLinkEntity extends SirenClientObject implements IEmbeddedEn
   public mediaType: string;
   public title: string;
 
-  constructor(httpClient: AngularHttpClient) {
-    super(httpClient);
+  constructor(httpClient: AngularHttpClient, schemaCache: ObservableLruCache<object>) {
+    super(httpClient, schemaCache);
   }
 
 }
@@ -627,7 +632,7 @@ export class HypermediaAction {
   public isParameterLess: boolean;
   public waheActionParameterName: string;
   public waheActionParameterClasses: string[];
-  public waheActionParameterJsonSchema: object;
+  public waheActionParameterJsonSchema: Observable<object>;
   public parameters: string;
 
   constructor() { }
