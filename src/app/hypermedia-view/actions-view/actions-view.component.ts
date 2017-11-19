@@ -1,5 +1,5 @@
-import { HypermediaAction } from './../hypermedia-client.service';
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { HypermediaAction } from '../siren-parser/hypermedia-action';
 
 @Component({
   selector: 'app-actions-view',

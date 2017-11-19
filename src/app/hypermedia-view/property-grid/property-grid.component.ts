@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PropertyInfo, PropertyTypes } from './../hypermedia-client.service';
+import { PropertyInfo, PropertyTypes } from '../siren-parser/property-info';
 
 @Component({
   selector: 'app-property-grid',

@@ -1,5 +1,6 @@
-import { HypermediaLink, HypermediaClientService } from './../hypermedia-client.service';
+import { HypermediaClientService } from './../hypermedia-client.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { HypermediaLink } from '../siren-parser/hypermedia-link';
 
 @Component({
   selector: 'app-link-view',

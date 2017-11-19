@@ -1,5 +1,6 @@
-import { HypermediaAction, HypermediaClientService, ActionResults } from './../../hypermedia-client.service';
+import { HypermediaClientService, ActionResults } from './../../hypermedia-client.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { HypermediaAction } from '../../siren-parser/hypermedia-action';
 
 @Component({
   selector: 'app-parameterless-action-view',

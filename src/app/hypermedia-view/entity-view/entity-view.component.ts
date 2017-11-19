@@ -1,5 +1,11 @@
-import { SirenClientObject, EmbeddedLinkEntity, EmbeddedEntity, HypermediaLink, PropertyInfo, HypermediaAction } from './../hypermedia-client.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { SirenClientObject } from '../siren-parser/siren-client-object';
+import { EmbeddedLinkEntity } from '../siren-parser/embedded-link-entity';
+import { EmbeddedEntity } from '../siren-parser/embedded-entity';
+import { HypermediaLink } from '../siren-parser/hypermedia-link';
+import { HypermediaAction } from '../siren-parser/hypermedia-action';
+import { PropertyInfo } from '../siren-parser/property-info';
+import { IEmbeddedEntity, IEmbeddedLinkEntity } from '../siren-parser/entity-interfaces';
 
 @Component({
   selector: 'app-entity-view',
@@ -11,8 +17,8 @@ export class EntityViewComponent implements OnInit, OnChanges {
   @Input() entity: SirenClientObject;
 
   public title: string;
-  public embeddedLinkEntities: EmbeddedLinkEntity[];
-  public embeddedEntities: EmbeddedEntity[];
+  public embeddedLinkEntities: IEmbeddedLinkEntity[];
+  public embeddedEntities: IEmbeddedEntity[];
   public classes: string;
   public links: HypermediaLink[] = new Array<HypermediaLink>();
   public properties: PropertyInfo[] = new Array<PropertyInfo>();

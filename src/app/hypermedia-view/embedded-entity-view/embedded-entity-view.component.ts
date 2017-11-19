@@ -1,5 +1,6 @@
-import { EmbeddedEntity, EmbeddedLinkEntity } from './../hypermedia-client.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { EmbeddedLinkEntity } from '../siren-parser/embedded-link-entity';
+import { EmbeddedEntity } from '../siren-parser/embedded-entity';
 
 @Component({
   selector: 'app-embedded-entity-view',
