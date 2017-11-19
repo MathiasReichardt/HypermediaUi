@@ -21,6 +21,9 @@ import { RawViewComponent } from './raw-view/raw-view.component';
 import { ActionsViewComponent } from './actions-view/actions-view.component';
 import { ParameterlessActionViewComponent } from './actions/parameterless-action-view/parameterless-action-view.component';
 import { ParameterActionComponent } from './actions/parameter-action/parameter-action.component';
+import { SirenDeserializer } from './siren-parser/siren-deserializer';
+import { SchemaSimplifier } from './siren-parser/schema-simplifier';
+import { HttpClient } from '@angular/common/http';
 
 
 @NgModule({
@@ -52,7 +55,13 @@ import { ParameterActionComponent } from './actions/parameter-action/parameter-a
     RawViewComponent,
     ActionsViewComponent,
     ParameterlessActionViewComponent,
-    ParameterActionComponent],
-  providers: [HypermediaClientService, ObservableLruCache]
+    ParameterActionComponent,
+  ],
+  providers: [
+    HypermediaClientService,
+    ObservableLruCache,
+    SirenDeserializer,
+    SchemaSimplifier,
+    HttpClient]
 })
 export class HypermediaViewModule { }

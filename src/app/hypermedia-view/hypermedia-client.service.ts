@@ -1,11 +1,12 @@
+import { SirenDeserializer } from './siren-parser/siren-deserializer';
 import { MockResponses } from './mockResponses';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
-import { findAll, find, get, where, replace } from 'simple-object-query';
-import { HttpClient as AngularHttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
+
+import { HttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { SirenClientObject } from './siren-parser/siren-client-object';
 import { HypermediaAction, HttpMethodTyes } from './siren-parser/hypermedia-action';
@@ -19,11 +20,11 @@ export class HypermediaClientService {
   private entryPoint = 'http://localhost:5000/Customers';
   // private entryPoint = 'http://localhost:5000/Customers/1';
 
-  private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject(this.httpClient, this.schemaCache));
+  private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
 
 
-  constructor(private httpClient: AngularHttpClient, private schemaCache: ObservableLruCache<object>) { }
+  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer) { }
 
   getHypermediaObjectStream(): BehaviorSubject<SirenClientObject> {
     return this.currentClientObject$;
@@ -165,12 +166,10 @@ export class HypermediaClientService {
   }
 
   private MapResponse(response: any): SirenClientObject {
-    const hco = new SirenClientObject(this.httpClient, this.schemaCache);
-    hco.deserialize(response);
+    const hco = this.sirenDeserializer.deserialize(response);
     return hco;
   }
 }
-
 
 export enum ActionResults {
   undefined,
