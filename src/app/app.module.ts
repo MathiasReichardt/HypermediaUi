@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { ErrorDialogModule } from './error-dialog/error-dialog.module';
 
@@ -11,11 +12,29 @@ import { AppComponent } from './app.component';
 import { LinkViewComponent } from './hypermedia-view/link-view/link-view.component';
 import { EmptyResponseBodyErrorInterceptor } from './HttpInterceptorWorkaround';
 
+const appRoutes: Routes = [
+  {
+    path: 'hui',
+    component: HypermediaControlComponent
+  },
+  { path: '',
+    redirectTo: '/hui',
+    pathMatch: 'full'
+  },
+  // { path: '**', component: PageNotFoundComponent } // TODO wildcard -> 404
+];
+
+
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // for debugging output
+    ),
+
     BrowserModule,
     BrowserAnimationsModule,
     ErrorDialogModule,
