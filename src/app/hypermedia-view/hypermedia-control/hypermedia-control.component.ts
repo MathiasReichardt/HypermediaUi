@@ -1,6 +1,6 @@
-import { HypermediaClientService, HypermediaLink, PropertyInfo,  EmbeddedEntity, EmbeddedLinkEntity } from './../hypermedia-client.service';
 import { Component, OnInit } from '@angular/core';
-import { SirenClientObject } from '../hypermedia-client.service';
+import { HypermediaClientService } from '../hypermedia-client.service';
+import { SirenClientObject } from '../siren-parser/siren-client-object';
 
 
 @Component({
