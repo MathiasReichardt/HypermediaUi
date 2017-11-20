@@ -39,12 +39,11 @@ export class SirenDeserializer {
   }
 
   private deserializeEntity(raw: any, result: ISirenClientObject) {
-    result.classes = [...(<string[]>raw.class)]; // todo what if undefined
+    result.classes = [...(<string[]>raw.class)]; // todo handle undefined
     result.title = raw.title;
-    result.links = this.deserializeLinks(raw.links); // todo what if undefined
-    result.properties = this.deserializeProperties(raw.properties);
-    result.actions = this.deserializeActions(raw.actions);
-
+    result.links = this.deserializeLinks(raw);
+    result.properties = this.deserializeProperties(raw);
+    result.actions = this.deserializeActions(raw);
 
     // todo preserve order of embeddedLinkEntitys and embeddedEntity, splitting types changes order
     result.embeddedLinkEntities = this.deserializeEmbeddedLinkEntity(raw.entities);
@@ -53,8 +52,14 @@ export class SirenDeserializer {
 
 
 
-  private deserializeLinks(links: any[]): HypermediaLink[] {
+  private deserializeLinks(raw: any): HypermediaLink[] {
     const result = new Array<HypermediaLink>();
+
+    if (!ReflectionHelpers.hasFilledArrayProperty(raw, 'links')) {
+      return result;
+    }
+
+    const links: any[] = raw.links;
     links.forEach(link => {
       result.push(new HypermediaLink([...link.rel], link.href));
     });
@@ -62,9 +67,14 @@ export class SirenDeserializer {
     return result;
   }
 
-  deserializeProperties(properties: any): PropertyInfo[] {
+  deserializeProperties(raw: any): PropertyInfo[] {
     const result = new Array<PropertyInfo>();
 
+    if (!ReflectionHelpers.hasFilledProperty(raw, 'properties')) {
+      return result;
+    }
+
+    const properties: any = raw.properties;
     for (const property in properties) {
       if (!properties.hasOwnProperty(property)) {
         continue;
@@ -112,9 +122,14 @@ export class SirenDeserializer {
     return result;
   }
 
-  deserializeActions(actions: any[]): HypermediaAction[] {
+  deserializeActions(raw: any): HypermediaAction[] {
     const result = new Array<HypermediaAction>();
 
+    if (!ReflectionHelpers.hasFilledArrayProperty(raw, 'actions')) {
+      return result;
+    }
+
+    const actions: any[] = raw.actions;
     actions.forEach(action => {
       const hypermediaAction = new HypermediaAction();
       hypermediaAction.name = action.name;
@@ -181,7 +196,7 @@ export class SirenDeserializer {
       }
 
       const linkEntity = new EmbeddedLinkEntity();
-      linkEntity.href = entity.href;           // todo what if not there
+      linkEntity.href = entity.href;
       linkEntity.relations = [...entity.rel];
       linkEntity.classes = [...entity.class];
       linkEntity.title = entity.title;
@@ -203,7 +218,7 @@ export class SirenDeserializer {
 
   parseWaheStyleParameters(action: any, hypermediaAction: HypermediaAction) {
     if (!ReflectionHelpers.hasProperty(action, 'type') || action.type !== this.waheActionType) {
-      throw new Error(`Only suporting actions with type="${this.waheActionType}". [action ${action.name}]`); // todo pars standard siren
+      throw new Error(`Only suporting actions with type="${this.waheActionType}". [action ${action.name}]`); // todo parse standard siren
     }
 
     if (!ReflectionHelpers.hasFilledArrayProperty(action, 'fields')) {
@@ -214,7 +229,7 @@ export class SirenDeserializer {
       throw new Error(`Action field may only contain one entry. [action ${action.name}]`);
     }
 
-    hypermediaAction.waheActionParameterName = action.fields[0].name; // todo check from pressence
+    hypermediaAction.waheActionParameterName = action.fields[0].name;
     hypermediaAction.waheActionParameterClasses = [...action.fields[0].class];
     if (hypermediaAction.waheActionParameterClasses.length !== 1) {
       throw new Error(`Action field may only contain one class. [action ${action.name}]`);
