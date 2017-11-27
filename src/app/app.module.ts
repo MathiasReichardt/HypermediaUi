@@ -6,11 +6,18 @@ import { NgModule } from '@angular/core';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 
+import { MatInputModule } from '@angular/material';
+import { MatIconModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
 import { ErrorDialogModule } from './error-dialog/error-dialog.module';
 
 import { AppComponent } from './app.component';
 import { LinkViewComponent } from './hypermedia-view/link-view/link-view.component';
 import { EmptyResponseBodyErrorInterceptor } from './HttpInterceptorWorkaround';
+import { MainPageComponent } from './main-page/main-page.component';
 
 const appRoutes: Routes = [
   {
@@ -18,16 +25,17 @@ const appRoutes: Routes = [
     component: HypermediaControlComponent
   },
   { path: '',
-    redirectTo: '/hui',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    component: MainPageComponent
   },
-  // { path: '**', component: PageNotFoundComponent } // TODO wildcard -> 404
+  // { path: '**', component: MainPageComponent } // wildcard -> 404
 ];
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainPageComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -37,6 +45,12 @@ const appRoutes: Routes = [
 
     BrowserModule,
     BrowserAnimationsModule,
+    MatInputModule,
+    MatIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+
     ErrorDialogModule,
     HypermediaViewModule,
   ],

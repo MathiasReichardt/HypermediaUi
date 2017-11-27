@@ -1,16 +1,16 @@
-import { SirenDeserializer } from './siren-parser/siren-deserializer';
-import { MockResponses } from './mockResponses';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
-
-import { HttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { SirenDeserializer } from './siren-parser/siren-deserializer';
+import { MockResponses } from './mockResponses';
 import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { SirenClientObject } from './siren-parser/siren-client-object';
 import { HypermediaAction, HttpMethodTyes } from './siren-parser/hypermedia-action';
-
 
 @Injectable()
 export class HypermediaClientService {
@@ -23,8 +23,10 @@ export class HypermediaClientService {
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
 
+  private navPaths: Array<string> = new Array<string>();
 
-  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer) { }
+
+  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, public router: Router) { }
 
   getHypermediaObjectStream(): BehaviorSubject<SirenClientObject> {
     return this.currentClientObject$;
@@ -36,6 +38,9 @@ export class HypermediaClientService {
 
   enterApi() {
     this.httpClient.get(this.entryPoint).subscribe(response => {
+      this.navPaths.push(this.entryPoint);
+      this.router.navigate(['hui'], { queryParams: { navPaths: this.navPaths } });
+
       const sirenClientObject = this.MapResponse(response);
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
@@ -44,6 +49,13 @@ export class HypermediaClientService {
 
   Navigate(url: string) {
     this.httpClient.get(url).subscribe(response => {
+      this.navPaths.push(url);
+      this.router.navigate(['hui'], {
+        queryParams: {
+          navPaths: this.navPaths
+        }
+      });
+
       const sirenClientObject = this.MapResponse(response);
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);

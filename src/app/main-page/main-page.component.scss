@@ -1,0 +1,22 @@
+.apiEntryFormField {
+  width: 400px;
+}
+
+.mainGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:1fr 1fr 1fr;
+    padding: 0.25rem;
+    height: 100%;
+}
+
+.containerForm{
+  justify-self: center;
+  grid-row: 2;
+}
+
+.navigateButton{
+  justify-self: center;
+  grid-row: 3;
+}
+
