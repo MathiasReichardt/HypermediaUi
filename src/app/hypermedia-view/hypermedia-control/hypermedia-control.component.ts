@@ -14,7 +14,7 @@ export class HypermediaControlComponent implements OnInit {
   public hto: SirenClientObject;
   public navPaths: string[];
 
-  constructor(private hypermediaClient: HypermediaClientService) { }
+  constructor(private hypermediaClient: HypermediaClientService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
@@ -29,7 +29,30 @@ export class HypermediaControlComponent implements OnInit {
       this.navPaths = navPaths;
     });
 
-    // this.hypermediaClient.enterApi();
+    const urlNavPaths: Array<string> = this.GetNavPathsFromQueryString();
+    this.hypermediaClient.InitNavPaths(urlNavPaths);
+    this.hypermediaClient.NavigateToCurrentNavPath();
+
+    // todo use rel of hypermedia links to name breadcrums buttons
+    // todo fix example.com navigation: detect html page content -> open new tab
+  }
+
+  private GetNavPathsFromQueryString(): Array<string> {
+    let urlNavPaths: any;
+
+    this.route.queryParams.subscribe(params => {
+      urlNavPaths = params['navPaths'];
+    });
+
+    if (!urlNavPaths) {
+      this.router.navigate(['']);
+    }
+
+    if (!Array.isArray(urlNavPaths)) {
+      urlNavPaths = [urlNavPaths];
+    }
+
+    return urlNavPaths;
   }
 
   public getUrlShortName(url: string): string {

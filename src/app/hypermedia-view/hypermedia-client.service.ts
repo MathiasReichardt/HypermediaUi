@@ -16,21 +16,12 @@ import { SirenHelpers } from './SirenHelpers';
 
 @Injectable()
 export class HypermediaClientService {
-
-
-  // private entryPoint = 'http://localhost:5000/entrypoint';
-  // private entryPoint = 'http://localhost:5000/Customers/Query';
-  private entryPoint = 'http://localhost:5000/Customers';
-  // private entryPoint = 'http://localhost:5000/Customers/1';
-
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
   private currentNavPaths$: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(new Array<string>());
-
   private navPaths: Array<string> = new Array<string>();
 
-
-  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, public router: Router) { }
+  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, private router: Router) { }
 
   getHypermediaObjectStream(): BehaviorSubject<SirenClientObject> {
     return this.currentClientObject$;
@@ -44,24 +35,22 @@ export class HypermediaClientService {
     return this.currentNavPaths$;
   }
 
-  // enterApi() {
-  //   this.httpClient.get(this.entryPoint).subscribe(response => {
-  //     this.navPaths.push(this.entryPoint);
-  //     this.router.navigate(['hui'], { queryParams: { navPaths: this.navPaths } });
+  NavigateToCurrentNavPath() {
+    if (!this.navPaths || this.navPaths.length === 0) {
+      this.router.navigate(['']);
+    }
 
-  //     const sirenClientObject = this.MapResponse(response);
-  //     this.currentClientObject$.next(sirenClientObject);
-  //     this.currentClientObjectRaw$.next(response);
-  //   });
-  // }
+    this.Navigate(this.navPaths[this.navPaths.length - 1]);
+  }
 
-  // todo initialize navPaths on Init control so refresh and bookmarking work
+  InitNavPaths(navPaths: Array<string>) {
+    this.navPaths = navPaths;
+  }
 
   Navigate(url: string) {
+    this.updateNavPaths(url);
+
     this.httpClient.get(url).subscribe(response => {
-
-
-
       this.router.navigate(['hui'], {
         queryParams: {
           navPaths: this.navPaths
@@ -70,25 +59,13 @@ export class HypermediaClientService {
 
       const sirenClientObject = this.MapResponse(response);
 
-      this.updateNavPaths(sirenClientObject, url);
-
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
       this.currentNavPaths$.next(this.navPaths);
     });
   }
 
-  private updateNavPaths(sirenClientObject: SirenClientObject, url: string) {
-    const selfLink = SirenHelpers.getFirstLinkByRelation(sirenClientObject, 'self');
-
-    let navUrl: string;
-    if (selfLink) {
-      // selflink might have canonical letter cases and is what the server intends
-      navUrl = selfLink.url;
-    } else {
-      navUrl = url;
-    }
-
+  private updateNavPaths(navUrl: string) {
     const navIndex = this.navPathsContain(navUrl);
     if (navIndex === -1 ) {
       this.navPaths.push(navUrl);
