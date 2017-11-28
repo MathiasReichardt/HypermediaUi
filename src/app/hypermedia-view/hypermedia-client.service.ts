@@ -1,3 +1,4 @@
+import { HypermediaLink } from './siren-parser/hypermedia-link';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -11,6 +12,7 @@ import { MockResponses } from './mockResponses';
 import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { SirenClientObject } from './siren-parser/siren-client-object';
 import { HypermediaAction, HttpMethodTyes } from './siren-parser/hypermedia-action';
+import { SirenHelpers } from './SirenHelpers';
 
 @Injectable()
 export class HypermediaClientService {
@@ -58,7 +60,7 @@ export class HypermediaClientService {
   Navigate(url: string) {
     this.httpClient.get(url).subscribe(response => {
 
-      this.updateNavPaths(url);
+
 
       this.router.navigate(['hui'], {
         queryParams: {
@@ -67,16 +69,29 @@ export class HypermediaClientService {
       });
 
       const sirenClientObject = this.MapResponse(response);
+
+      this.updateNavPaths(sirenClientObject, url);
+
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
       this.currentNavPaths$.next(this.navPaths);
     });
   }
 
-  private updateNavPaths(url: string) {
-    const navIndex = this.navPathsContain(url);
+  private updateNavPaths(sirenClientObject: SirenClientObject, url: string) {
+    const selfLink = SirenHelpers.getFirstLinkByRelation(sirenClientObject, 'self');
+
+    let navUrl: string;
+    if (selfLink) {
+      // selflink might have canonical letter cases and is what the server intends
+      navUrl = selfLink.url;
+    } else {
+      navUrl = url;
+    }
+
+    const navIndex = this.navPathsContain(navUrl);
     if (navIndex === -1 ) {
-      this.navPaths.push(url);
+      this.navPaths.push(navUrl);
       return;
     }
 
