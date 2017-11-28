@@ -15,7 +15,7 @@ public urlFormControl: FormControl;
   @Input() apiEntryPoint: string = null;
 
   constructor(private hypermediaClientService: HypermediaClientService ) {
-    this.apiEntryPoint = '';
+    this.apiEntryPoint = 'http://localhost:5000/EntryPoint';
 
     this.urlFormControl = new FormControl('', [
       Validators.required,

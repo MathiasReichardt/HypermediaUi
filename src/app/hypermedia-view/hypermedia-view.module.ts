@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 import { MatCardModule } from '@angular/material';
-import { MatButtonModule, MatGridListModule, MatCheckboxModule, MatExpansionModule, MatTabsModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatGridListModule, MatCheckboxModule, MatExpansionModule, MatTabsModule, MatTooltipModule, MatIconModule } from '@angular/material';
 import { PrettyJsonModule } from 'angular2-prettyjson';
 
 import { JsonSchemaFormModule } from 'angular2-json-schema-form';
@@ -37,6 +37,7 @@ import { HttpClient } from '@angular/common/http';
     MatExpansionModule,
     MatTabsModule,
     MatTooltipModule,
+    MatIconModule,
     FlexLayoutModule,
     MatInputModule,
     MatSelectModule,

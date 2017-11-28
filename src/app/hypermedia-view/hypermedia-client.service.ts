@@ -15,6 +15,7 @@ import { HypermediaAction, HttpMethodTyes } from './siren-parser/hypermedia-acti
 @Injectable()
 export class HypermediaClientService {
 
+
   // private entryPoint = 'http://localhost:5000/entrypoint';
   // private entryPoint = 'http://localhost:5000/Customers/Query';
   private entryPoint = 'http://localhost:5000/Customers';
@@ -22,6 +23,7 @@ export class HypermediaClientService {
 
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
+  private currentNavPaths$: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(new Array<string>());
 
   private navPaths: Array<string> = new Array<string>();
 
@@ -36,20 +38,28 @@ export class HypermediaClientService {
     return this.currentClientObjectRaw$;
   }
 
-  enterApi() {
-    this.httpClient.get(this.entryPoint).subscribe(response => {
-      this.navPaths.push(this.entryPoint);
-      this.router.navigate(['hui'], { queryParams: { navPaths: this.navPaths } });
-
-      const sirenClientObject = this.MapResponse(response);
-      this.currentClientObject$.next(sirenClientObject);
-      this.currentClientObjectRaw$.next(response);
-    });
+  getNavPathsStream(): BehaviorSubject<Array<string>> {
+    return this.currentNavPaths$;
   }
+
+  // enterApi() {
+  //   this.httpClient.get(this.entryPoint).subscribe(response => {
+  //     this.navPaths.push(this.entryPoint);
+  //     this.router.navigate(['hui'], { queryParams: { navPaths: this.navPaths } });
+
+  //     const sirenClientObject = this.MapResponse(response);
+  //     this.currentClientObject$.next(sirenClientObject);
+  //     this.currentClientObjectRaw$.next(response);
+  //   });
+  // }
+
+  // todo initialize navPaths on Init control so refresh and bookmarking work
 
   Navigate(url: string) {
     this.httpClient.get(url).subscribe(response => {
-      this.navPaths.push(url);
+
+      this.updateNavPaths(url);
+
       this.router.navigate(['hui'], {
         queryParams: {
           navPaths: this.navPaths
@@ -59,6 +69,34 @@ export class HypermediaClientService {
       const sirenClientObject = this.MapResponse(response);
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
+      this.currentNavPaths$.next(this.navPaths);
+    });
+  }
+
+  private updateNavPaths(url: string) {
+    const navIndex = this.navPathsContain(url);
+    if (navIndex === -1 ) {
+      this.navPaths.push(url);
+      return;
+    }
+
+    this.navPaths = this.navPaths.slice(0, navIndex + 1);
+  }
+
+  private navPathsContain(url: string): number {
+    for (let i = 0; i < this.navPaths.length; i++) {
+      if (this.navPaths[i] === url) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+
+  navigateToMainPage() {
+    this.navPaths = new Array<string>();
+    this.router.navigate([''], {
     });
   }
 

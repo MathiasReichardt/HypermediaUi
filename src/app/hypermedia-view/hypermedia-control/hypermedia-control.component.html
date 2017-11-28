@@ -1,4 +1,17 @@
-<mat-card>Breadcrums</mat-card>
+<mat-card>
+  <button mat-raised-button matTooltip="Home" (click)="navigateMainPage()">
+    <mat-icon class="icon">keyboard_arrow_left</mat-icon>
+  </button>
+
+  <ng-container *ngFor="let link of navPaths">
+    <button mat-raised-button matTooltip="{{link}}" (click)="navigateLink(link)">
+      {{getUrlShortName(link)}}
+    </button>
+
+  </ng-container>
+
+</mat-card>
+
 <mat-tab-group>
   <mat-tab label="UI">
     <app-entity-view [entity]="hto"></app-entity-view>
