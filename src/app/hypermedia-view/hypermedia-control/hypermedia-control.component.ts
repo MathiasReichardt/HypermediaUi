@@ -18,11 +18,6 @@ export class HypermediaControlComponent implements OnInit {
   public navPaths: string[];
 
   constructor(private hypermediaClient: HypermediaClientService, private route: ActivatedRoute, private router: Router, location: PlatformLocation) {
-
-    location.onPopState(() => {
-
-      console.log('pressed back!');
-    });
   }
 
   ngOnInit() {
@@ -41,7 +36,10 @@ export class HypermediaControlComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const apiPath = new ApiPath();
       apiPath.initFromRouterParams(params);
-      this.hypermediaClient.NavigateToApiPath(apiPath);
+
+      if (!this.hypermediaClient.currentApiPath.isEqual(apiPath)) {
+        this.hypermediaClient.NavigateToApiPath(apiPath);
+      }
     });
 
   }

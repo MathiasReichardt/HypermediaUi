@@ -21,12 +21,34 @@ export class ApiPath {
       this.apiPath = apiPath;
     }
 
+
+    isEqual(other: ApiPath): boolean {
+      if (!other) {
+        return false;
+      }
+      if (this.pathLength !== other.pathLength) {
+        return false;
+      }
+
+      for (let i = 0; i < this.apiPath.length; i++) {
+        if (this[i] !== other[i]) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
     clear() {
       this.apiPath = [];
     }
 
     get newestSegment(): string {
-      return this.apiPath[this.apiPath.length - 1]
+      return this.apiPath[this.apiPath.length - 1];
+    }
+
+    get pathLength(): number {
+      return this.apiPath.length;
     }
 
     get hasPath(): boolean {

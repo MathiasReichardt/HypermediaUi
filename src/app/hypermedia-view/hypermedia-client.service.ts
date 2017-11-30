@@ -45,6 +45,10 @@ export class HypermediaClientService {
     this.Navigate(this.apiPath.newestSegment);
   }
 
+  get currentApiPath(): ApiPath {
+    return this.apiPath;
+  }
+
   Navigate(url: string) {
     this.apiPath.addStep(url);
 
