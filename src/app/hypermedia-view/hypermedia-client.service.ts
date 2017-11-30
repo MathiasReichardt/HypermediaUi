@@ -1,30 +1,28 @@
-import { SirenDeserializer } from './siren-parser/siren-deserializer';
-import { MockResponses } from './mockResponses';
+import { HypermediaLink } from './siren-parser/hypermedia-link';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
-
-import { HttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { SirenDeserializer } from './siren-parser/siren-deserializer';
+import { MockResponses } from './mockResponses';
 import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { SirenClientObject } from './siren-parser/siren-client-object';
 import { HypermediaAction, HttpMethodTyes } from './siren-parser/hypermedia-action';
-
+import { SirenHelpers } from './SirenHelpers';
+import { ApiPath } from './api-path';
 
 @Injectable()
 export class HypermediaClientService {
-
-  // private entryPoint = 'http://localhost:5000/entrypoint';
-  // private entryPoint = 'http://localhost:5000/Customers/Query';
-  private entryPoint = 'http://localhost:5000/Customers';
-  // private entryPoint = 'http://localhost:5000/Customers/1';
-
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
+  private currentNavPaths$: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(new Array<string>());
+  private apiPath: ApiPath = new ApiPath();
 
-
-  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer) { }
+  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, private router: Router) { }
 
   getHypermediaObjectStream(): BehaviorSubject<SirenClientObject> {
     return this.currentClientObject$;
@@ -34,19 +32,46 @@ export class HypermediaClientService {
     return this.currentClientObjectRaw$;
   }
 
-  enterApi() {
-    this.httpClient.get(this.entryPoint).subscribe(response => {
-      const sirenClientObject = this.MapResponse(response);
-      this.currentClientObject$.next(sirenClientObject);
-      this.currentClientObjectRaw$.next(response);
-    });
+  getNavPathsStream(): BehaviorSubject<Array<string>> {
+    return this.currentNavPaths$;
+  }
+
+  NavigateToApiPath(apiPath: ApiPath) {
+    if (!apiPath || !apiPath.hasPath) {
+      this.router.navigate(['']);
+    }
+
+    this.apiPath = apiPath;
+    this.Navigate(this.apiPath.newestSegment);
+  }
+
+  get currentApiPath(): ApiPath {
+    return this.apiPath;
   }
 
   Navigate(url: string) {
+    this.apiPath.addStep(url);
+
     this.httpClient.get(url).subscribe(response => {
+      this.router.navigate(['hui'], {
+        queryParams: {
+          apiPath: this.apiPath.fullPath
+        }
+      });
+
       const sirenClientObject = this.MapResponse(response);
+
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
+      this.currentNavPaths$.next(this.apiPath.fullPath);
+    });
+  }
+
+
+
+  navigateToMainPage() {
+    this.apiPath.clear();
+    this.router.navigate([''], {
     });
   }
 
@@ -56,7 +81,7 @@ export class HypermediaClientService {
         this.httpClient.post(action.href, {}).subscribe(
           response => { actionResult(ActionResults.ok, this.getStatusMessage((<HttpResponseBase>response).status)); },
           error => {
-            actionResult(ActionResults.error, this.getStatusMessage((<HttpResponseBase>error).status)); // TODO process ProblemJson
+            actionResult(ActionResults.error, this.getStatusMessage((<HttpResponseBase>error).status)); // TODO process ProblemJson, SirenProblem https://github.com/kevinswiber/siren/issues/5
             // throw new Error('HypermediaClientService: Error in request: ' + (<HttpErrorResponse>error).message);
           },
           () => { actionResult(ActionResults.ok); }); // TODO on complete reload current entity?

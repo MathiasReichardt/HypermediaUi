@@ -1,0 +1,23 @@
+<div class="mainGrid">
+  <form class="containerForm">
+    <mat-form-field class="apiEntryFormField">
+      <input matInput
+        type="url"
+        placeholder="Enter API entry URL"
+        [(ngModel)]="apiEntryPoint"
+        name="apiEntryPointInput"
+        [formControl]="urlFormControl"/>
+      <mat-error *ngIf="urlFormControl.hasError('pattern')">
+        Please enter a valid URL
+      </mat-error>
+
+      <button mat-button *ngIf="apiEntryPoint" matSuffix mat-icon-button aria-label="Clear" (click)="apiEntryPoint=''">
+        <mat-icon class="icon">close</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+
+  <button class= "navigateButton"  mat-button *ngIf="apiEntryPoint" matSuffix mat-raised-button (click)="navigate()">
+    <mat-icon>explore</mat-icon>
+  </button>
+</div>

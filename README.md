@@ -1,27 +1,34 @@
-# HypermediaUi
+# hypermedia UI
+This is an experimental UI to generically process Siren speaking Https servers.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.3.
+#Todo List
+Clean up all the code todos :)
 
-## Development server
+## UI
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- use rel of hypermedia links to name breadcrums buttons -> add to ApiPath
+- fold action form by default to save screen space
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## BUGS 
 
-## Build
+## Features
+- Detect if link leads to a html site. Open this page in a new tab e.g. example.com navigation in carshack
+- Config Dialog:
+  - default api on main page
+  - developer configs: show empty sections, show classes, show raw tab
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+- Read selflink and place a refresh button on entities, this could be the first link to extract from default rendering
+- Add copy self link button "coyp entity ref" so if action needs are reference it is easy to copy. Also for embedded entities
+- Add copy button to arbitary links
+- Add warning are where messages can be shown, maybe console like
+- Read default siren action with parameters (form encoded): option: generate schema and feed it to the form generator
+- Authorization/Authentification support
 
-## Running unit tests
+## Code
+- Refactor breadcrum into own control
+- Update to Angular 5.0
+- self host material icon font so it is off line enabled (demos!!)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Class based Controlls
+- research: loadable form remote on runtime
