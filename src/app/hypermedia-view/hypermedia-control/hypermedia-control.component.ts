@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HypermediaClientService } from '../hypermedia-client.service';
 import { SirenClientObject } from '../siren-parser/siren-client-object';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PlatformLocation } from '@angular/common';
+import { ApiPath } from '../api-path';
 
-// todo for query pagination use a drop down button containing all with smae url but different query string
 // todo make breadcrum component
+// todo for query pagination use a drop down button containing all with smae url but different query string
 @Component({
   selector: 'app-hypermedia-control',
   templateUrl: './hypermedia-control.component.html',
@@ -14,7 +17,13 @@ export class HypermediaControlComponent implements OnInit {
   public hto: SirenClientObject;
   public navPaths: string[];
 
-  constructor(private hypermediaClient: HypermediaClientService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private hypermediaClient: HypermediaClientService, private route: ActivatedRoute, private router: Router, location: PlatformLocation) {
+
+    location.onPopState(() => {
+
+      console.log('pressed back!');
+    });
+  }
 
   ngOnInit() {
     this.hypermediaClient.getHypermediaObjectStream().subscribe((hto) => {
@@ -29,30 +38,12 @@ export class HypermediaControlComponent implements OnInit {
       this.navPaths = navPaths;
     });
 
-    const urlNavPaths: Array<string> = this.GetNavPathsFromQueryString();
-    this.hypermediaClient.InitNavPaths(urlNavPaths);
-    this.hypermediaClient.NavigateToCurrentNavPath();
-
-    // todo use rel of hypermedia links to name breadcrums buttons
-    // todo fix example.com navigation: detect html page content -> open new tab
-  }
-
-  private GetNavPathsFromQueryString(): Array<string> {
-    let urlNavPaths: any;
-
     this.route.queryParams.subscribe(params => {
-      urlNavPaths = params['navPaths'];
+      const apiPath = new ApiPath();
+      apiPath.initFromRouterParams(params);
+      this.hypermediaClient.NavigateToApiPath(apiPath);
     });
 
-    if (!urlNavPaths) {
-      this.router.navigate(['']);
-    }
-
-    if (!Array.isArray(urlNavPaths)) {
-      urlNavPaths = [urlNavPaths];
-    }
-
-    return urlNavPaths;
   }
 
   public getUrlShortName(url: string): string {

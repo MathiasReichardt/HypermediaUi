@@ -13,13 +13,14 @@ import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { SirenClientObject } from './siren-parser/siren-client-object';
 import { HypermediaAction, HttpMethodTyes } from './siren-parser/hypermedia-action';
 import { SirenHelpers } from './SirenHelpers';
+import { ApiPath } from './api-path';
 
 @Injectable()
 export class HypermediaClientService {
   private currentClientObject$: BehaviorSubject<SirenClientObject> = new BehaviorSubject<SirenClientObject>(new SirenClientObject());
   private currentClientObjectRaw$: BehaviorSubject<object> = new BehaviorSubject<object>({});
   private currentNavPaths$: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(new Array<string>());
-  private navPaths: Array<string> = new Array<string>();
+  private apiPath: ApiPath = new ApiPath();
 
   constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, private router: Router) { }
 
@@ -35,25 +36,22 @@ export class HypermediaClientService {
     return this.currentNavPaths$;
   }
 
-  NavigateToCurrentNavPath() {
-    if (!this.navPaths || this.navPaths.length === 0) {
+  NavigateToApiPath(apiPath: ApiPath) {
+    if (!apiPath || !apiPath.hasPath) {
       this.router.navigate(['']);
     }
 
-    this.Navigate(this.navPaths[this.navPaths.length - 1]);
-  }
-
-  InitNavPaths(navPaths: Array<string>) {
-    this.navPaths = navPaths;
+    this.apiPath = apiPath;
+    this.Navigate(this.apiPath.newestSegment);
   }
 
   Navigate(url: string) {
-    this.updateNavPaths(url);
+    this.apiPath.addStep(url);
 
     this.httpClient.get(url).subscribe(response => {
       this.router.navigate(['hui'], {
         queryParams: {
-          navPaths: this.navPaths
+          apiPath: this.apiPath.fullPath
         }
       });
 
@@ -61,33 +59,14 @@ export class HypermediaClientService {
 
       this.currentClientObject$.next(sirenClientObject);
       this.currentClientObjectRaw$.next(response);
-      this.currentNavPaths$.next(this.navPaths);
+      this.currentNavPaths$.next(this.apiPath.fullPath);
     });
   }
 
-  private updateNavPaths(navUrl: string) {
-    const navIndex = this.navPathsContain(navUrl);
-    if (navIndex === -1 ) {
-      this.navPaths.push(navUrl);
-      return;
-    }
-
-    this.navPaths = this.navPaths.slice(0, navIndex + 1);
-  }
-
-  private navPathsContain(url: string): number {
-    for (let i = 0; i < this.navPaths.length; i++) {
-      if (this.navPaths[i] === url) {
-        return i;
-      }
-    }
-
-    return -1;
-  }
 
 
   navigateToMainPage() {
-    this.navPaths = new Array<string>();
+    this.apiPath.clear();
     this.router.navigate([''], {
     });
   }
@@ -98,7 +77,7 @@ export class HypermediaClientService {
         this.httpClient.post(action.href, {}).subscribe(
           response => { actionResult(ActionResults.ok, this.getStatusMessage((<HttpResponseBase>response).status)); },
           error => {
-            actionResult(ActionResults.error, this.getStatusMessage((<HttpResponseBase>error).status)); // TODO process ProblemJson
+            actionResult(ActionResults.error, this.getStatusMessage((<HttpResponseBase>error).status)); // TODO process ProblemJson, SirenProblem https://github.com/kevinswiber/siren/issues/5
             // throw new Error('HypermediaClientService: Error in request: ' + (<HttpErrorResponse>error).message);
           },
           () => { actionResult(ActionResults.ok); }); // TODO on complete reload current entity?

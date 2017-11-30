@@ -27,8 +27,7 @@ public urlFormControl: FormControl;
   }
 
   navigate() {
-    this.hypermediaClientService.InitNavPaths([this.apiEntryPoint]);
-    this.hypermediaClientService.NavigateToCurrentNavPath();
+    this.hypermediaClientService.Navigate(this.apiEntryPoint);
   }
 
 }

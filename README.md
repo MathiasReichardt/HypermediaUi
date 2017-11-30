@@ -6,7 +6,7 @@ Clean up all the code todos :)
 
 ## UI
 
-- use rel of hypermedia links to name breadcrums buttons
+- use rel of hypermedia links to name breadcrums buttons -> add to ApiPath
 - fold action form by default to save screen space
 
 
@@ -26,6 +26,7 @@ Clean up all the code todos :)
 - Authorization/Authentification support
 
 ## Code
+- Refactor breadcrum into own control
 - Update to Angular 5.0
 - self host material icon font so it is off line enabled (demos!!)
 
