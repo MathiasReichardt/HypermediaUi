@@ -8,7 +8,7 @@ Clean up all the code todos :)
 
 - use rel of hypermedia links to name breadcrums buttons -> add to ApiPath
 - fold action form by default to save screen space
-
+- breadcrums:  for query pagination use a drop down button containing all with same url but different query string to save space
 
 ## BUGS 
 

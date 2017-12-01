@@ -1,4 +1,13 @@
-<h2>{{action.name}}: {{action.title}} </h2>
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{action.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+            {{action.title}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
 <!-- <div>classes: {{action.classes.join(",")}}</div> -->
 <!-- <div>schema: {{action.waheActionParameterJsonSchema | async}}</div> -->
 
@@ -14,3 +23,4 @@
 <span>{{actionMessage}}</span>
 
 <!-- <app-raw-view [rawObject]="action.waheActionParameterJsonSchema | async"></app-raw-view> -->
+</mat-expansion-panel>

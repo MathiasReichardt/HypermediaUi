@@ -1,11 +1,14 @@
 <h3>{{title}}</h3>
 
-<mat-card>Classes: {{classes}}</mat-card>
+<mat-card *ngIf="configuration.showClasses">Classes: {{classes}}</mat-card>
 
-<app-property-grid [propertyContainer]="properties"></app-property-grid>
+<app-property-grid [propertyContainer]="properties" *ngIf="configuration.showEmptyProperties || properties?.length > 0"></app-property-grid>
 
-<app-embedded-entity-view [embeddedEntities]="embeddedEntities" [embeddedLinkEntities]="embeddedLinkEntities"></app-embedded-entity-view>
+<app-embedded-entity-view
+ [embeddedEntities]="embeddedEntities"
+ [embeddedLinkEntities]="embeddedLinkEntities"
+ *ngIf="configuration.showEmptyEntities || embeddedEntities?.length > 0 || embeddedLinkEntities?.length > 0"></app-embedded-entity-view>
 
-<app-actions-view [actions]="actions"></app-actions-view>
+<app-actions-view [actions]="actions" *ngIf="configuration.showEmptyActions || actions?.length > 0"></app-actions-view>
 
-<app-link-view [links]="links"></app-link-view>
+<app-link-view [links]="links" *ngIf="configuration.showEmptyLinks || links?.length > 0"></app-link-view>

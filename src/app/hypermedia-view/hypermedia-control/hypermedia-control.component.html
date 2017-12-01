@@ -9,11 +9,13 @@
   </ng-container>
 </mat-card>
 
-<mat-tab-group>
+<mat-tab-group *ngIf="configuration.showRawTab">
   <mat-tab label="UI">
     <app-entity-view [entity]="hto"></app-entity-view>
   </mat-tab>
-  <mat-tab label="Raw">
+  <mat-tab label="Raw" >
     <app-raw-view [rawObject]="rawResponse"></app-raw-view>
   </mat-tab>
 </mat-tab-group>
+
+<app-entity-view [entity]="hto" *ngIf="!configuration.showRawTab"></app-entity-view>
