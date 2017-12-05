@@ -10,7 +10,8 @@ Clean up all the code todos :)
 - fold action form by default to save screen space
 - breadcrums:  for query pagination use a drop down button containing all with same url but different query string to save space
 
-## BUGS 
+## BUGS
+- always send siren accept header 
 
 ## Features
 - Detect if link leads to a html site. Open this page in a new tab e.g. example.com navigation in carshack
