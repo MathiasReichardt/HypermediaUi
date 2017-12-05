@@ -4,9 +4,9 @@ import { SirenClientObject } from '../siren-parser/siren-client-object';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
 import { ApiPath } from '../api-path';
+import { HypermediaVieConfiguration } from '../hypermedia-view-configuration';
 
-// todo make breadcrum component
-// todo for query pagination use a drop down button containing all with smae url but different query string
+
 @Component({
   selector: 'app-hypermedia-control',
   templateUrl: './hypermedia-control.component.html',
@@ -17,7 +17,7 @@ export class HypermediaControlComponent implements OnInit {
   public hto: SirenClientObject;
   public navPaths: string[];
 
-  constructor(private hypermediaClient: HypermediaClientService, private route: ActivatedRoute, private router: Router, location: PlatformLocation) {
+  constructor(private hypermediaClient: HypermediaClientService, private route: ActivatedRoute, private router: Router, location: PlatformLocation, public configuration: HypermediaVieConfiguration) {
   }
 
   ngOnInit() {
