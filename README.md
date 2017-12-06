@@ -16,7 +16,7 @@ Clean up all the code todos :)
 - Breadcrums:  for query pagination use a drop down button containing all with same url but different query string to save space
 
 ## BUGS
-- always send siren accept header 
+- Always send siren accept header 
 
 ## Features
 - Support standard Siren actions (at the moment only WebapiHypermediaExtensions style Actions)
@@ -35,7 +35,7 @@ Clean up all the code todos :)
 ## Code
 - Refactor breadcrum into own control
 - Update to Angular 5.0
-- self host material icon font so it is off line enabled (demos!!)
+- Self host material icon font so it is off line enabled (demos!)
 
 ## Class based Controlls
-- research: loadable form remote on runtime
+- Research: loadable components from remotes at runtime
