@@ -1,5 +1,5 @@
 # Hypermedia UI
-This is an *experimental* UI to generically process Siren speaking Https servers.
+This is an *experimental* UI to generically process Siren speaking http servers.
 Note that it is developed to access Siren APIs which format Actions using a accessable class link which delivers a JsonSchema.
 
 This Client is (for now) designed to work with the [WebApiHypermediaExtensions project](https://github.com/bluehands/WebApiHypermediaExtensions).
@@ -7,13 +7,13 @@ Use the demoserver "CarShack" from this project to have a quick compliant backen
 
 There will be bugs and it is not very fault tollerant. Be nice to the UI :)
 
-#Todo List
+# Todo List
 Clean up all the code todos :)
 
 ## UI
-- use rel of hypermedia links to name breadcrums buttons -> add to ApiPath
-- fold action form by default to save screen space
-- breadcrums:  for query pagination use a drop down button containing all with same url but different query string to save space
+- Use rel of hypermedia links to name breadcrums buttons -> add to ApiPath
+- Fold action form by default to save screen space
+- Breadcrums:  for query pagination use a drop down button containing all with same url but different query string to save space
 
 ## BUGS
 - always send siren accept header 
