@@ -8,7 +8,7 @@
         name="apiEntryPointInput"
         [formControl]="urlFormControl"/>
       <mat-error *ngIf="urlFormControl.hasError('pattern')">
-        Please enter a valid URL
+        Check your URL
       </mat-error>
 
       <button mat-button *ngIf="apiEntryPoint" matSuffix mat-icon-button aria-label="Clear" (click)="apiEntryPoint=''">
