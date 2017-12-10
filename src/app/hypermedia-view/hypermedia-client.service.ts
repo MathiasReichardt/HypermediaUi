@@ -22,6 +22,9 @@ export class HypermediaClientService {
   private currentNavPaths$: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(new Array<string>());
   private apiPath: ApiPath = new ApiPath();
 
+  private sirenMediaType = 'application/vnd.siren+json';
+  private jsonMediaType = 'application/json';
+
   constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, private router: Router) { }
 
   getHypermediaObjectStream(): BehaviorSubject<SirenClientObject> {
@@ -52,7 +55,13 @@ export class HypermediaClientService {
   Navigate(url: string) {
     this.apiPath.addStep(url);
 
-    this.httpClient.get(url).subscribe(response => {
+    const headers = new HttpHeaders().set('Accept', this.sirenMediaType);
+
+    this.httpClient
+    .get(url, {
+      headers: headers
+    })
+    .subscribe(response => {
       this.router.navigate(['hui'], {
         queryParams: {
           apiPath: this.apiPath.fullPath
@@ -67,8 +76,6 @@ export class HypermediaClientService {
     });
   }
 
-
-
   navigateToMainPage() {
     this.apiPath.clear();
     this.router.navigate([''], {
@@ -76,9 +83,16 @@ export class HypermediaClientService {
   }
 
   executeParameterlessAction(action: HypermediaAction, actionResult: (ActionResults, string?) => void): any {
+    const headers = new HttpHeaders();
+    headers.set('Accept', this.sirenMediaType);
+
     switch (action.method) {
       case HttpMethodTyes.POST:
-        this.httpClient.post(action.href, {}).subscribe(
+        this.httpClient
+        .post(action.href, {
+          headers: headers
+        })
+        .subscribe(
           response => { actionResult(ActionResults.ok, this.getStatusMessage((<HttpResponseBase>response).status)); },
           error => {
             actionResult(ActionResults.error, this.getStatusMessage((<HttpResponseBase>error).status)); // TODO process ProblemJson, SirenProblem https://github.com/kevinswiber/siren/issues/5
@@ -111,6 +125,10 @@ export class HypermediaClientService {
   executeAction(action: HypermediaAction, actionResult: (actionResults: ActionResults, resultLocation, content, string?) => void): any {
     const parameters = this.createWaheStyleActeionParameters(action);
 
+    const headers = new HttpHeaders();
+    headers.set('Content-Type', this.jsonMediaType);
+    headers.set('Accept', this.sirenMediaType);
+
     // todo if action responds with a action resource, process body
     switch (action.method) {
       case HttpMethodTyes.POST:
@@ -122,8 +140,8 @@ export class HypermediaClientService {
             // can not use std http client due to bug: https://github.com/angular/angular/issues/18680
             // 'Location' header will not be contained
             observe: 'response',
-          }
-          )
+            headers: headers
+          })
           .subscribe(
           (response: HttpResponse<any>) => {
             const location = response.headers.get('Location');
