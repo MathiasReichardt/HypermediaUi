@@ -17,7 +17,6 @@ Clean up all the code todos :)
 
 ## BUGS
 - Always send siren accept header
-- Url regex pattern indicates shows invalid for urls with local host (entrypoint)
 
 ## Features
 - Support standard Siren actions (at the moment only WebapiHypermediaExtensions style Actions)
