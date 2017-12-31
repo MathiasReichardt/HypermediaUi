@@ -4,13 +4,10 @@
   </mat-card-title>
 
   <mat-card-content>
-    <mat-list>
-      <mat-list-item *ngFor="let link of links">
-        <button mat-raised-button (click)="navigateLink(link)" matTooltip="{{link.url}}">
-          {{link.relations.join(',')}}
-        </button>
-      </mat-list-item>
-    </mat-list>
+    <span *ngFor="let link of links">
+      <button mat-raised-button (click)="navigateLink(link)" matTooltip="{{link.url}}">
+        {{link.relations.join(',')}}
+      </button>
+    </span>
   </mat-card-content>
-
 </mat-card>

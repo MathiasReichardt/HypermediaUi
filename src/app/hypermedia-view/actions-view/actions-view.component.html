@@ -4,8 +4,7 @@
     </mat-card-title>
 
     <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let action of actions">
+        <ng-container *ngFor="let action of actions">
 
           <ng-container *ngIf="action.isParameterLess; else parameterActionTemplate">
             <app-parameterless-action-view [action]=action></app-parameterless-action-view>
@@ -13,8 +12,9 @@
           <ng-template #parameterActionTemplate>
               <app-parameter-action [action]=action></app-parameter-action>
           </ng-template>
-        </mat-list-item>
-      </mat-list>
+
+        </ng-container>
+
     </mat-card-content>
 
   </mat-card>

@@ -1,30 +1,36 @@
-import { HypermediaVieConfiguration } from './hypermedia-view-configuration';
-import { ObservableLruCache } from './api-access/observable-lru-cache';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
-import { MatCardModule } from '@angular/material';
-import { MatButtonModule, MatGridListModule, MatCheckboxModule, MatExpansionModule, MatTabsModule, MatTooltipModule, MatIconModule } from '@angular/material';
-import { PrettyJsonModule } from 'angular2-prettyjson';
-
-import { JsonSchemaFormModule } from 'angular2-json-schema-form';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatInputModule, MatSelectModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatIconModule,
+  MatTabsModule,
+  MatTooltipModule,
+} from '@angular/material';
+import { MatCardModule, MatListModule } from '@angular/material';
+import { JsonSchemaFormModule } from 'angular2-json-schema-form';
+import { PrettyJsonModule } from 'angular2-prettyjson';
 
-import { HypermediaControlComponent } from './hypermedia-control/hypermedia-control.component';
-import { HypermediaClientService } from './hypermedia-client.service';
-import { PropertyGridComponent } from './property-grid/property-grid.component';
-import { LinkViewComponent } from './link-view/link-view.component';
+import { ActionsViewComponent } from './actions-view/actions-view.component';
+import { ParameterActionComponent } from './actions/parameter-action/parameter-action.component';
+import { ParameterlessActionViewComponent } from './actions/parameterless-action-view/parameterless-action-view.component';
+import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { EmbeddedEntityViewComponent } from './embedded-entity-view/embedded-entity-view.component';
 import { EntityViewComponent } from './entity-view/entity-view.component';
+import { HypermediaClientService } from './hypermedia-client.service';
+import { HypermediaControlComponent } from './hypermedia-control/hypermedia-control.component';
+import { HypermediaVieConfiguration } from './hypermedia-view-configuration';
+import { LinkViewComponent } from './link-view/link-view.component';
+import { PropertyGridComponent } from './property-grid/property-grid.component';
 import { RawViewComponent } from './raw-view/raw-view.component';
-import { ActionsViewComponent } from './actions-view/actions-view.component';
-import { ParameterlessActionViewComponent } from './actions/parameterless-action-view/parameterless-action-view.component';
-import { ParameterActionComponent } from './actions/parameter-action/parameter-action.component';
-import { SirenDeserializer } from './siren-parser/siren-deserializer';
 import { SchemaSimplifier } from './siren-parser/schema-simplifier';
-import { HttpClient } from '@angular/common/http';
+import { SirenDeserializer } from './siren-parser/siren-deserializer';
 
 
 @NgModule({
@@ -39,6 +45,7 @@ import { HttpClient } from '@angular/common/http';
     MatTabsModule,
     MatTooltipModule,
     MatIconModule,
+    MatListModule,
     FlexLayoutModule,
     MatInputModule,
     MatSelectModule,
