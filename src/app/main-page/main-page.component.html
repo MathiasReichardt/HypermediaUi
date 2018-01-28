@@ -1,12 +1,11 @@
 <div class="mainGrid">
+  <div class="spacer"></div>
+  <span class="header">
+    Hypermedia UI
+  </span>
   <form class="containerForm">
     <mat-form-field class="apiEntryFormField">
-      <input matInput
-        type="url"
-        placeholder="Enter API entry URL"
-        [(ngModel)]="apiEntryPoint"
-        name="apiEntryPointInput"
-        [formControl]="urlFormControl"/>
+      <input matInput type="url" placeholder="Enter API entry URL" [(ngModel)]="apiEntryPoint" name="apiEntryPointInput" [formControl]="urlFormControl"/>
       <mat-error *ngIf="urlFormControl.hasError('pattern')">
         Check your URL
       </mat-error>
@@ -17,7 +16,7 @@
     </mat-form-field>
   </form>
 
-  <button class= "navigateButton"  mat-button *ngIf="apiEntryPoint" matSuffix mat-raised-button (click)="navigate()">
+  <button class="navigateButton" mat-button *ngIf="apiEntryPoint" matSuffix mat-raised-button (click)="navigate()">
     Enter API
     <mat-icon>explore</mat-icon>
   </button>

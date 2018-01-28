@@ -1,13 +1,25 @@
-.apiEntryFormField {
-  width: 400px;
-}
-
 .mainGrid {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows:1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
     padding: 0.25rem;
     height: 100%;
+}
+
+.spacer {
+  grid-row: 1;
+}
+
+.header {
+  font-size: 30px;
+  font-weight: bold;
+
+  justify-self: center;
+  grid-row: 2;
+}
+
+.apiEntryFormField {
+  width: 400px;
 }
 
 mat-error {
@@ -16,11 +28,11 @@ mat-error {
 
 .containerForm{
   justify-self: center;
-  grid-row: 2;
+  grid-row: 3;
 }
 
 .navigateButton{
   justify-self: center;
-  grid-row: 3;
+  grid-row: 4;
 }
 
