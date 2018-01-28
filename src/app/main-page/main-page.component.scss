@@ -1,21 +1,11 @@
+@import '../../defaults.scss';
+
 .mainGrid {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    padding: 0.25rem;
+    grid-template-rows: 1fr 1fr 1fr;
+    padding: $defaultSpacing;
     height: 100%;
-}
-
-.spacer {
-  grid-row: 1;
-}
-
-.header {
-  font-size: 30px;
-  font-weight: bold;
-
-  justify-self: center;
-  grid-row: 2;
 }
 
 .apiEntryFormField {
@@ -26,13 +16,16 @@ mat-error {
   color: orange;
 }
 
+.spacer{
+  grid-row: 1;
+}
 .containerForm{
   justify-self: center;
-  grid-row: 3;
+  grid-row: 2;
 }
 
 .navigateButton{
   justify-self: center;
-  grid-row: 4;
+  grid-row: 3;
 }
 

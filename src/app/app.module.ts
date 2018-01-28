@@ -3,12 +3,13 @@ import { HypermediaControlComponent } from './hypermedia-view/hypermedia-control
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MatInputModule } from '@angular/material';
 import { MatIconModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material';
+import { MatToolbarModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -24,7 +25,8 @@ const appRoutes: Routes = [
     path: 'hui',
     component: HypermediaControlComponent
   },
-  { path: '',
+  {
+    path: '',
     pathMatch: 'full',
     component: MainPageComponent
   },
@@ -47,6 +49,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     MatInputModule,
     MatIconModule,
+    MatToolbarModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
