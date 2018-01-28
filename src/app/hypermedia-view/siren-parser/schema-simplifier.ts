@@ -13,7 +13,7 @@ export class SchemaSimplifier {
     this.flatenOneOf(response);
     this.fixUnknownFormats(response);
 
-    // angular2-json-schema-form: 0.7.0-alpha.1 leaves schema version in schema object when translation from schema 4 to 6
+    // angular2-json-schema-form: 0.7.0-alpha.1 leaves schema version in schema object when translating from schema 4 to 6
     // until fixed remove schema version
     this.removeSchemaSpecification(response);
   }
