@@ -14,7 +14,7 @@ import {
   MatTooltipModule,
 } from '@angular/material';
 import { MatCardModule, MatListModule } from '@angular/material';
-import { JsonSchemaFormModule } from 'angular2-json-schema-form';
+import { JsonSchemaFormModule, MaterialDesignFrameworkModule } from 'angular2-json-schema-form';
 import { PrettyJsonModule } from 'angular2-prettyjson';
 
 import { ActionsViewComponent } from './actions-view/actions-view.component';
@@ -49,7 +49,8 @@ import { SirenDeserializer } from './siren-parser/siren-deserializer';
     FlexLayoutModule,
     MatInputModule,
     MatSelectModule,
-    JsonSchemaFormModule,
+    MaterialDesignFrameworkModule,
+    JsonSchemaFormModule.forRoot(MaterialDesignFrameworkModule),
     PrettyJsonModule
   ],
   exports: [

@@ -12,6 +12,17 @@ export class SchemaSimplifier {
     this.fixNullablesInOneOf(response);
     this.flatenOneOf(response);
     this.fixUnknownFormats(response);
+
+    // angular2-json-schema-form: 0.7.0-alpha.1 leaves schema version in schema object when translation from schema 4 to 6
+    // until fixed remove schema version
+    this.removeSchemaSpecification(response);
+  }
+
+  private removeSchemaSpecification(schema: any) {
+    const schemaProeprty = '$schema';
+    if (schema.hasOwnProperty(schemaProeprty)) {
+      delete schema[schemaProeprty];
+    }
   }
 
   private fixUnknownFormats(object: any) {

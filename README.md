@@ -16,7 +16,8 @@ Clean up all the code todos :)
 - Breadcrums:  for query pagination use a drop down button containing all with same url but different query string to save space
 
 ## BUGS
-- Action forms are not rendered pretty. Probably solved with new version of `angular2-json-schema-form`.
+- angular2-json-schema-form: 0.7.0-alpha.1 leaves schema version in schema object when translating from schema 4 to 6.
+  Until fixed the schema version is removed before passing on.
 
 ## Features
 - Support standard Siren actions (at the moment only WebapiHypermediaExtensions style Actions)
