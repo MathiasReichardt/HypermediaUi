@@ -10,7 +10,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
 $hui-app-primary: mat-palette($mat-cyan);
-$hui-app-accent:  mat-palette($mat-teal, A200, A100, A400);
+$hui-app-accent:  mat-palette($mat-light-green, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $hui-app-warn:    mat-palette($mat-red);

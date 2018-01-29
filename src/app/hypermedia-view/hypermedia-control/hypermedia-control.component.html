@@ -1,13 +1,17 @@
-<mat-card>
-  <button mat-raised-button matTooltip="Exit API" (click)="navigateMainPage()">
-    <mat-icon class="icon">exit_to_app</mat-icon>
+<mat-toolbar color="primary">
+    <span>Hypermedia UI</span>
+</mat-toolbar>
+
+<mat-toolbar class="apiToolbar" >
+  <button mat-raised-button matTooltip="Exit API" (click)="navigateMainPage()" color="primary" class="apiNavButton">
+    <mat-icon class="icon" >exit_to_app</mat-icon>
   </button>
   <ng-container *ngFor="let link of navPaths">
-    <button mat-raised-button matTooltip="{{link}}" (click)="navigateLink(link)">
+    <button mat-raised-button matTooltip="{{link}}" (click)="navigateLink(link)" color="primary"  class="apiNavButton">
       {{getUrlShortName(link)}}
     </button>
   </ng-container>
-</mat-card>
+</mat-toolbar>
 
 <mat-tab-group *ngIf="configuration.showRawTab">
   <mat-tab label="UI">

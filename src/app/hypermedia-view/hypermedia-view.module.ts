@@ -12,6 +12,7 @@ import {
   MatIconModule,
   MatTabsModule,
   MatTooltipModule,
+  MatToolbarModule
 } from '@angular/material';
 import { MatCardModule, MatListModule } from '@angular/material';
 import { JsonSchemaFormModule, MaterialDesignFrameworkModule } from 'angular2-json-schema-form';
@@ -45,6 +46,7 @@ import { SirenDeserializer } from './siren-parser/siren-deserializer';
     MatTabsModule,
     MatTooltipModule,
     MatIconModule,
+    MatToolbarModule,
     MatListModule,
     FlexLayoutModule,
     MatInputModule,
