@@ -1,15 +1,20 @@
 <mat-toolbar color="primary">
     <span>Hypermedia UI</span>
+    <span class="spacer"></span>
+    <button mat-button matTooltip="Exit API" (click)="navigateMainPage()">
+      <mat-icon class="icon" >exit_to_app</mat-icon>
+    </button>
 </mat-toolbar>
 
 <mat-toolbar class="apiToolbar" >
-  <button mat-raised-button matTooltip="Exit API" (click)="navigateMainPage()" color="primary" class="apiNavButton">
-    <mat-icon class="icon" >exit_to_app</mat-icon>
-  </button>
-  <ng-container *ngFor="let link of navPaths">
-    <button mat-raised-button matTooltip="{{link}}" (click)="navigateLink(link)" color="primary"  class="apiNavButton">
+
+  <ng-container *ngFor="let link of navPaths; let i = index">
+    <button mat-raised-button matTooltip="{{link}}" (click)="navigateLink(link)" color="primary">
       {{getUrlShortName(link)}}
     </button>
+
+    <mat-icon *ngIf="i < navPaths.length-1">play_arrow</mat-icon>
+
   </ng-container>
 </mat-toolbar>
 
