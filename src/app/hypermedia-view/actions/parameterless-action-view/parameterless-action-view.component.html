@@ -1,4 +1,5 @@
 <button mat-raised-button (click)="executeAction()" matTooltip="{{action.title}}">
-{{action.name}}
+    <mat-icon class="icon" color="primary">play_circle_outline</mat-icon>
+    <span>{{action.name}}</span>
 </button>
 <span>{{actionMessage}}</span>

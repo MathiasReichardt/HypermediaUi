@@ -1,0 +1,19 @@
+@import '../../../defaults.scss';
+
+.container {
+  margin-top: $defaultContainerSpacing;
+}
+
+.itemsHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.spacer {
+  flex: auto auto;
+}
+
+.itemsLabel {
+  font-size: 12px;
+  color: grey;
+}

@@ -1,8 +1,10 @@
+@import '../../../defaults.scss';
+
 .propertyGrid {
   display: grid;
   grid-template-columns: 1fr 4fr;
   grid-template-rows:1rem;
-  padding: 0.25rem;
+  padding: $defaultSpacing 0;
 }
 
 .propertyLable .propertyValue {

@@ -1,14 +1,17 @@
-<h3>{{title}}</h3>
+<div class="container">
 
-<mat-card *ngIf="configuration.showClasses">Classes: {{classes}}</mat-card>
+  <div class="entityTitle">
+    {{title}}
+  </div>
 
-<app-property-grid [propertyContainer]="properties" *ngIf="configuration.showEmptyProperties || properties?.length > 0"></app-property-grid>
+  <div *ngIf="configuration.showClasses">Classes: {{classes}}</div>
 
-<app-embedded-entity-view
- [embeddedEntities]="embeddedEntities"
- [embeddedLinkEntities]="embeddedLinkEntities"
- *ngIf="configuration.showEmptyEntities || embeddedEntities?.length > 0 || embeddedLinkEntities?.length > 0"></app-embedded-entity-view>
+  <app-property-grid [propertyContainer]="properties" *ngIf="configuration.showEmptyProperties || properties?.length > 0"></app-property-grid>
 
-<app-actions-view [actions]="actions" *ngIf="configuration.showEmptyActions || actions?.length > 0"></app-actions-view>
+  <app-embedded-entity-view [embeddedEntities]="embeddedEntities" [embeddedLinkEntities]="embeddedLinkEntities" *ngIf="configuration.showEmptyEntities || embeddedEntities?.length > 0 || embeddedLinkEntities?.length > 0"></app-embedded-entity-view>
 
-<app-link-view [links]="links" *ngIf="configuration.showEmptyLinks || links?.length > 0"></app-link-view>
+  <app-actions-view [actions]="actions" *ngIf="configuration.showEmptyActions || actions?.length > 0"></app-actions-view>
+
+  <app-link-view [links]="links" *ngIf="configuration.showEmptyLinks || links?.length > 0"></app-link-view>
+
+</div>

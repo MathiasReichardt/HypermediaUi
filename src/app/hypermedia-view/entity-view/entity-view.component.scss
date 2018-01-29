@@ -1,0 +1,10 @@
+@import '../../../defaults.scss';
+
+.container {
+  padding: $defaultContainerSpacing;
+}
+
+.entityTitle {
+  font-size: 20px;
+  font-weight: bold;
+}

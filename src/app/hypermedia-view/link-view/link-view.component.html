@@ -1,13 +1,7 @@
-<mat-card>
-  <mat-card-title>
-    Links
-  </mat-card-title>
-
-  <mat-card-content>
-    <span *ngFor="let link of links">
-      <button mat-raised-button (click)="navigateLink(link)" matTooltip="{{link.url}}">
-        {{link.relations.join(',')}}
-      </button>
-    </span>
-  </mat-card-content>
-</mat-card>
+<div class="container">
+  <span *ngFor="let link of links">
+    <button mat-raised-button (click)="navigateLink(link)" matTooltip="{{link.url}}" color="primary">
+      {{link.relations.join(',')}}
+    </button>
+  </span>
+</div>
