@@ -1,7 +1,10 @@
 <div class="container">
   <span *ngFor="let link of links">
     <button mat-raised-button (click)="navigateLink(link)" matTooltip="{{link.url}}" color="primary">
-      {{link.relations.join(',')}}
+      <mat-icon>play_arrow</mat-icon>
+      <span>
+        {{link.relations.join(',')}}
+      </span>
     </button>
   </span>
 </div>
