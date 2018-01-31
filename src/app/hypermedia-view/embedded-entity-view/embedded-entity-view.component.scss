@@ -22,3 +22,7 @@
 .entityExpander {
   margin: $defaultSpacing 0;
 }
+
+::ng-deep div.mat-expansion-panel-body {
+  padding: $defaultSpacing;
+}
