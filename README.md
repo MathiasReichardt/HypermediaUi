@@ -20,7 +20,7 @@ Clean up all the code todos :)
   Until fixed the schema version is removed before passing on.
 
 ## Features
-- Support standard Siren actions (at the moment only WebapiHypermediaExtensions style Actions)
+- Support standard Siren actions (at the moment only WebapiHypermediaExtensions style Actions) with parameters (form encoded): option: generate schema and feed it to the form generator
 - Detect if link leads to a html site. Open this page in a new tab e.g. example.com navigation in carshack
 - Config Dialog:
   - default api on main page
@@ -30,12 +30,13 @@ Clean up all the code todos :)
 - Add copy self link button "coyp entity ref" so if action needs are reference it is easy to copy. Also for embedded entities
 - Add copy button to arbitary links
 - Add warning are where messages can be shown, maybe console like
-- Read default siren action with parameters (form encoded): option: generate schema and feed it to the form generator
+
 - Authorization/Authentification support
+  - basic authentification
+  - JSON Web Tokens (+ OAuth?)
 
 ## Code
 - Refactor breadcrum into own control
-- Update to Angular 5.0
 - Self host material icon font so it is off line enabled (demos!)
 
 ## Class based Controlls
