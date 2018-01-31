@@ -1,25 +1,23 @@
-<!-- <mat-card-title>
-    Entities ({{embeddedEntities?.length + embeddedLinkEntities?.length}})
-  </mat-card-title> -->
-
 <div class="container">
   <div class="itemsHeader">
     <span class="spacer"></span>
     <span class="itemsLabel">{{embeddedEntities?.length + embeddedLinkEntities?.length}} items</span>
   </div>
 
-  <mat-expansion-panel *ngFor="let embeddedEntity of embeddedEntities; let idx = index">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{idx + 1}}: {{embeddedEntity.relations.join(",")}}
-      </mat-panel-title>
-      <mat-panel-description>
-        Classes: {{embeddedEntity.classes.join(",")}}
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+  <ng-container *ngFor="let embeddedEntity of embeddedEntities; let idx = index">
+    <mat-expansion-panel  class="entityExpander">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{idx + 1}}: {{embeddedEntity.relations.join(",")}}
+        </mat-panel-title>
+        <mat-panel-description>
+          Classes: {{embeddedEntity.classes.join(",")}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
 
-    <app-entity-view [entity]="embeddedEntity"></app-entity-view>
+      <app-entity-view [entity]="embeddedEntity"></app-entity-view>
 
-  </mat-expansion-panel>
+    </mat-expansion-panel>
+  </ng-container>
   <div class="warning" *ngIf="embeddedLinkEntities?.length !== 0">Warning: no Link Entities shown.</div>
 </div>

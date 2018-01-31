@@ -2,6 +2,7 @@
 
 .container {
   margin-top: $defaultContainerSpacing;
+  padding: 0;
 }
 
 .itemsHeader {
@@ -16,4 +17,8 @@
 .itemsLabel {
   font-size: 12px;
   color: grey;
+}
+
+.entityExpander {
+  margin: $defaultSpacing 0;
 }
