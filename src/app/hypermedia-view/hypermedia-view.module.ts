@@ -19,8 +19,8 @@ import { JsonSchemaFormModule, MaterialDesignFrameworkModule } from 'angular2-js
 import { PrettyJsonModule } from 'angular2-prettyjson';
 
 import { ActionsViewComponent } from './actions-view/actions-view.component';
-import { ParameterActionComponent } from './actions/parameter-action/parameter-action.component';
-import { ParameterlessActionViewComponent } from './actions/parameterless-action-view/parameterless-action-view.component';
+import { ParameterActionComponent } from './actions-view/parameter-action/parameter-action.component';
+import { ParameterlessActionViewComponent } from './actions-view/parameterless-action-view/parameterless-action-view.component';
 import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { EmbeddedEntityViewComponent } from './embedded-entity-view/embedded-entity-view.component';
 import { EntityViewComponent } from './entity-view/entity-view.component';
