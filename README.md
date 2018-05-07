@@ -12,8 +12,7 @@ Clean up all the code todos :)
 
 ## UI
 - Use rel of hypermedia links to name breadcrums buttons -> add to ApiPath
-- Fold action form by default to save screen space
-- Breadcrums:  for query pagination use a drop down button containing all with same url but different query string to save space
+- Breadcrums:  for query pagination in ApiPath use a drop down button containing all with same url but different query string to save space
 
 ## BUGS
 - angular2-json-schema-form: 0.7.0-alpha.1 leaves schema version in schema object when translating from schema 4 to 6.
