@@ -7,6 +7,7 @@ import { HypermediaLink } from '../siren-parser/hypermedia-link';
 import { HypermediaAction } from '../siren-parser/hypermedia-action';
 import { PropertyInfo } from '../siren-parser/property-info';
 import { IEmbeddedEntity, IEmbeddedLinkEntity } from '../siren-parser/entity-interfaces';
+import { SirenHelpers } from '../SirenHelpers';
 
 @Component({
   selector: 'app-entity-view',
@@ -25,7 +26,7 @@ export class EntityViewComponent implements OnInit, OnChanges {
   public properties: PropertyInfo[] = new Array<PropertyInfo>();
   public actions: HypermediaAction[]= new Array<HypermediaAction>();
 
-  constructor(public configuration: HypermediaVieConfiguration) { }
+  constructor(public configuration: HypermediaVieConfiguration, private sirenHelper: SirenHelpers) { }
 
   ngOnInit() {
     this.processHto();
@@ -43,6 +44,10 @@ export class EntityViewComponent implements OnInit, OnChanges {
     this.embeddedEntities = this.entity.embeddedEntities;
     this.title = this.entity.title;
     this.actions = this.entity.actions;
+  }
+
+  getSelfLink() {
+    return this.sirenHelper.getFirstLinkByRelation(this.entity, 'self');
   }
 
 }

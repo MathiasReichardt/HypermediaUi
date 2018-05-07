@@ -12,7 +12,6 @@ import { MockResponses } from './mockResponses';
 import { ObservableLruCache } from './api-access/observable-lru-cache';
 import { SirenClientObject } from './siren-parser/siren-client-object';
 import { HypermediaAction, HttpMethodTyes } from './siren-parser/hypermedia-action';
-import { SirenHelpers } from './SirenHelpers';
 import { ApiPath } from './api-path';
 
 @Injectable()

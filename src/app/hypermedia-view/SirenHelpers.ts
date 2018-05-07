@@ -5,7 +5,7 @@ import { HypermediaLink } from './siren-parser/hypermedia-link';
 export class SirenHelpers {
 
   // case insensitive
-  public static getFirstLinkByRelation(sirenClientObject: SirenClientObject, rel: string): HypermediaLink {
+  getFirstLinkByRelation(sirenClientObject: SirenClientObject, rel: string): HypermediaLink {
     const relLowerCase = rel.toLowerCase();
 
     let result: HypermediaLink = null;

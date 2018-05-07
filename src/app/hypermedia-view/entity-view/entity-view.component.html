@@ -4,6 +4,16 @@
     {{title}}
   </div>
 
+  <div *ngIf="getSelfLink()">
+    <button mat-raised-button matTooltip="{{getSelfLink().url}}" color="primary">
+      <mat-icon>play_arrow</mat-icon>
+      <span>Custom component</span>
+      <span>
+        {{getSelfLink().relations.join(',')}}
+      </span>
+    </button>
+  </div>
+
   <div *ngIf="configuration.showClasses">Classes: {{classes}}</div>
 
   <app-property-grid [propertyContainer]="properties" *ngIf="configuration.showEmptyProperties || properties?.length > 0"></app-property-grid>
@@ -13,7 +23,5 @@
   <app-embedded-entity-view [embeddedEntities]="embeddedEntities" [embeddedLinkEntities]="embeddedLinkEntities" *ngIf="configuration.showEmptyEntities || embeddedEntities?.length > 0 || embeddedLinkEntities?.length > 0"></app-embedded-entity-view>
 
   <app-actions-view [actions]="actions" *ngIf="configuration.showEmptyActions || actions?.length > 0"></app-actions-view>
-
-
 
 </div>
