@@ -13,5 +13,7 @@ export class HypermediaVieConfiguration {
   showEmptyLinks = false;
 
   showEmptyActions = false;
+
+  useEmbeddingPropertyForActionParameters = true;
 }
 

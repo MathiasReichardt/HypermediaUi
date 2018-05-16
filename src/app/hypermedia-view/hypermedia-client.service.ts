@@ -1,3 +1,4 @@
+import { HypermediaVieConfiguration } from './hypermedia-view-configuration';
 import { HypermediaLink } from './siren-parser/hypermedia-link';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponseBase, HttpResponse, HttpHeaders } from '@angular/common/http';
@@ -25,7 +26,7 @@ export class HypermediaClientService {
   private sirenMediaType = 'application/vnd.siren+json';
   private jsonMediaType = 'application/json';
 
-  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, private router: Router) { }
+  constructor(private httpClient: HttpClient, private schemaCache: ObservableLruCache<object>, private sirenDeserializer: SirenDeserializer, private router: Router, private hypermediaConfiguration: HypermediaVieConfiguration) { }
 
   getHypermediaObjectStream(): BehaviorSubject<SirenClientObject> {
     return this.currentClientObject$;
@@ -109,7 +110,7 @@ export class HypermediaClientService {
     }
   }
 
-  createWaheStyleActeionParameters(action: HypermediaAction): any {
+  createWaheStyleActionParameters(action: HypermediaAction): any {
     if (action.parameters === null) {
       throw new Error(`Action requires parameters but got none. ${action}`);
     }
@@ -123,7 +124,12 @@ export class HypermediaClientService {
   }
 
   executeAction(action: HypermediaAction, actionResult: (actionResults: ActionResults, resultLocation, content, string?) => void): any {
-    const parameters = this.createWaheStyleActeionParameters(action);
+    let parameters;
+    if (this.hypermediaConfiguration.useEmbeddingPropertyForActionParameters) {
+      parameters = this.createWaheStyleActionParameters(action);
+    } else {
+      parameters = action.parameters;
+    }
 
     const headers = new HttpHeaders();
     headers.set('Content-Type', this.jsonMediaType);
