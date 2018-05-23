@@ -19,5 +19,18 @@
 
     </mat-expansion-panel>
   </ng-container>
-  <div class="warning" *ngIf="embeddedLinkEntities?.length !== 0">Warning: no Link Entities shown.</div>
+
+  <ng-container *ngFor="let embeddedLinkEntity of embeddedLinkEntities; let idx = index">
+     <mat-card  class="embeddedLinkEntityCard" >
+        <span>
+          {{idx + 1 + embeddedEntities?.length}}: {{embeddedLinkEntity.relations.join(",")}}
+        </span>
+        <span>
+          Classes: {{embeddedLinkEntity.classes.join(",")}}
+        </span>
+        <button class="entityLinkButton" mat-raised-button (click)="navigateHref(embeddedLinkEntity.href)" matTooltip="{{embeddedLinkEntity.href}}" color="primary">
+            <mat-icon>play_arrow</mat-icon>
+        </button>
+    </mat-card>
+  </ng-container>
 </div>
