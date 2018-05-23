@@ -4,3 +4,24 @@
   margin-top: $defaultContainerSpacing;
   padding: 0;
 }
+
+.buttonContainer:hover .CopyToClipboardButton {
+  display: inline;
+}
+
+.buttonContainer:hover .CopyToClipboardButton {
+  display: inline;
+}
+.buttonContainer .CopyToClipboardButton {
+  display: none;
+}
+
+.CopyToClipboardButton{
+   padding: 0px;
+   margin: 0px;
+   overflow: hidden;
+}
+
+::ng-deep .mat-icon-button {
+  font-size: 10px;
+}

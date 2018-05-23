@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { ErrorDialogModule } from './error-dialog/error-dialog.module';
 
@@ -53,6 +53,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
+    ClipboardModule,
 
     ErrorDialogModule,
     HypermediaViewModule,

@@ -32,6 +32,8 @@ import { PropertyGridComponent } from './property-grid/property-grid.component';
 import { RawViewComponent } from './raw-view/raw-view.component';
 import { SchemaSimplifier } from './siren-parser/schema-simplifier';
 import { SirenDeserializer } from './siren-parser/siren-deserializer';
+import { ClipboardModule } from 'ngx-clipboard';
+
 
 
 @NgModule({
@@ -53,7 +55,8 @@ import { SirenDeserializer } from './siren-parser/siren-deserializer';
     MatSelectModule,
     MaterialDesignFrameworkModule,
     JsonSchemaFormModule.forRoot(MaterialDesignFrameworkModule),
-    PrettyJsonModule
+    PrettyJsonModule,
+    ClipboardModule,
   ],
   exports: [
     HypermediaControlComponent

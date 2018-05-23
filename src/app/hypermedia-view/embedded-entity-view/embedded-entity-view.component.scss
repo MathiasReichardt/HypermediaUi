@@ -28,14 +28,16 @@
   padding-top: $defaultSpacing;
   padding-bottom: $defaultSpacing;
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr auto auto;
   align-items: center;
 }
 
 .entityLinkButton {
   justify-self: end;
 }
-
+.CopyToClipboardButton{
+  justify-self: end;
+}
 
 ::ng-deep div.mat-expansion-panel-body {
   padding: $defaultSpacing;
