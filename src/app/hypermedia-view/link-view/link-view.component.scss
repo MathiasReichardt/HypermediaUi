@@ -8,10 +8,6 @@
 .buttonContainer:hover .CopyToClipboardButton {
   display: inline;
 }
-
-.buttonContainer:hover .CopyToClipboardButton {
-  display: inline;
-}
 .buttonContainer .CopyToClipboardButton {
   display: none;
 }
@@ -19,7 +15,7 @@
 .CopyToClipboardButton{
    padding: 0px;
    margin: 0px;
-   overflow: hidden;
+   max-height: 24px;
 }
 
 ::ng-deep .mat-icon-button {
