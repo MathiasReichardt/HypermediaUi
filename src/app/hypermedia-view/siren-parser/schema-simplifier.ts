@@ -123,40 +123,20 @@ export class SchemaSimplifier {
   }
 
   private resolveLocalReferences(schema: any) {
-    const foundRefsArrays = <Array<any>>find(schema, {
-      'oneOf': /\.*/
-    });
-
-    foundRefsArrays.forEach(element => {
-      const elemetsToRemove = [];
-      element.oneOf.forEach(one => {
-        if (ReflectionHelpers.hasProperty(one, '$ref')) {
-          const definitionKey = (<string>one.$ref).replace('#/definitions/', '');
-          const replacement = schema.definitions[definitionKey];
-          if (!replacement) {
-            throw new Error(`Can not resolve schema reference: ${one.$ref}`);
-          }
-          element.oneOf.push(schema.definitions[definitionKey]);
-          elemetsToRemove.push(one);
-        }
-
-        elemetsToRemove.forEach(e => {
-          const index = element.oneOf.indexOf(e);
-          if (index >= 0) {
-            element.oneOf.splice(index, 1);
-          }
-
-        });
-      });
-    });
-
-    // recursion, migth have replaced ref with a subschema which contains a ref.
-    const remainingRefs = <Array<any>>find(schema, {
+    const foundRefs = <Array<any>>find(schema, {
       '$ref': /\.*/
     });
-    if (remainingRefs.length !== 0) {
-      this.resolveLocalReferences(schema);
-    }
+
+    foundRefs.forEach(refParent => {
+      const definitionKey = (<string>refParent.$ref).replace('#/definitions/', '');
+      const replacement = schema.definitions[definitionKey];
+      if (!replacement) {
+        throw new Error(`Can not resolve schema reference: ${refParent.$ref}`);
+      }
+
+      delete refParent.$ref;
+      Object.assign(refParent, replacement);
+    });
 
     delete schema.definitions;
     return;
