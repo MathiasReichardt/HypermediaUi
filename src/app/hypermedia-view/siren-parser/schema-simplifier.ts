@@ -123,22 +123,40 @@ export class SchemaSimplifier {
   }
 
   private resolveLocalReferences(schema: any) {
-    const foundRefs = <Array<any>>find(schema, {
-      '$ref': /\.*/
-    });
+    // could have replaced a ref with something that contained a ref
+    let iteration = 0;
+    const maxTrys = 50;
+    while (iteration < maxTrys) {
+      const foundRefs = <Array<any>>find(schema, {
+        '$ref': /\.*/
+      });
 
+      if (foundRefs.length === 0) {
+        break;
+      }
+
+      this.ReplaceRefs(foundRefs, schema);
+
+      iteration++;
+    }
+    if (iteration === maxTrys) {
+      console.error(`Could not resolve all schema refs in ${maxTrys} trys.`);
+      return;
+    }
+
+    delete schema.definitions;
+    return;
+  }
+
+  private ReplaceRefs(foundRefs: any[], schema: any) {
     foundRefs.forEach(refParent => {
       const definitionKey = (<string>refParent.$ref).replace('#/definitions/', '');
       const replacement = schema.definitions[definitionKey];
       if (!replacement) {
         throw new Error(`Can not resolve schema reference: ${refParent.$ref}`);
       }
-
       delete refParent.$ref;
       Object.assign(refParent, replacement);
     });
-
-    delete schema.definitions;
-    return;
   }
 }
