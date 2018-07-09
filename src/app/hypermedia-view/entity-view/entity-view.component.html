@@ -6,7 +6,7 @@
 
   <div *ngIf="configuration.showClasses">Classes: {{classes}}</div>
 
-  <app-property-grid [propertyContainer]="properties" *ngIf="configuration.showEmptyProperties || properties?.length > 0"></app-property-grid>
+  <app-property-grid [propertyContainer]="properties" [configuration]="configuration"></app-property-grid>
 
   <app-link-view [links]="links" *ngIf="configuration.showEmptyLinks || links?.length > 0"></app-link-view>
 

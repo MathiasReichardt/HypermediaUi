@@ -10,6 +10,8 @@ export class HypermediaVieConfiguration {
 
   showEmptyProperties = false;
 
+  showNullProperties = true;
+
   showEmptyLinks = false;
 
   showEmptyActions = false;
