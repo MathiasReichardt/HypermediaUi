@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Renderer } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { EmbeddedLinkEntity } from '../siren-parser/embedded-link-entity';
 import { EmbeddedEntity } from '../siren-parser/embedded-entity';
 import { HypermediaClientService } from '../hypermedia-client.service';

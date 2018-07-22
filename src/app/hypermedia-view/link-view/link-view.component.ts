@@ -1,5 +1,5 @@
 import { HypermediaClientService } from './../hypermedia-client.service';
-import { Component, OnInit, Input, Renderer } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HypermediaLink } from '../siren-parser/hypermedia-link';
 import { ClipboardService } from 'ngx-clipboard';
 
