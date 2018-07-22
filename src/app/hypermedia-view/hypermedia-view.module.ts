@@ -15,7 +15,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import { MatCardModule, MatListModule } from '@angular/material';
-import { JsonSchemaFormModule, MaterialDesignFrameworkModule } from 'angular2-json-schema-form';
+import { JsonSchemaFormModule, MaterialDesignFrameworkModule, JsonSchemaFormService, FrameworkLibraryService, WidgetLibraryService, Framework, Bootstrap4FrameworkModule } from 'angular2-json-schema-form';
 import { PrettyJsonModule } from 'angular2-prettyjson';
 
 import { ActionsViewComponent } from './actions-view/actions-view.component';
@@ -54,7 +54,17 @@ import { ClipboardModule } from 'ngx-clipboard';
     MatInputModule,
     MatSelectModule,
     MaterialDesignFrameworkModule,
-    JsonSchemaFormModule.forRoot(MaterialDesignFrameworkModule),
+    // workaround for: https://github.com/dschnelldavis/angular2-json-schema-form/issues/189
+    // JsonSchemaFormModule.forRoot(MaterialDesignFrameworkModule),
+    {
+      ngModule: JsonSchemaFormModule,
+      providers: [
+          JsonSchemaFormService,
+          FrameworkLibraryService,
+          WidgetLibraryService,
+          {provide: Framework, useClass: Bootstrap4FrameworkModule, multi: true}
+      ]
+    },
     PrettyJsonModule,
     ClipboardModule,
   ],
