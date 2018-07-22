@@ -10,6 +10,8 @@ There will be bugs and it is not very fault tollerant. Be nice to the UI :)
 # Todo List
 Clean up all the code todos :)
 
+- move to newest angular and rx version
+
 ## UI
 - Use rel of hypermedia links to name breadcrums buttons -> add to ApiPath
 - Breadcrums:  for query pagination in ApiPath use a drop down button containing all with same url but different query string to save space
@@ -26,13 +28,16 @@ Clean up all the code todos :)
   - developer configs: show empty sections, show classes, show raw tab
 
 - Read selflink and place a refresh button on entities, this could be the first link to extract from default rendering
-- Add copy self link button "coyp entity ref" so if action needs are reference it is easy to copy. Also for embedded entities
 - Add copy button to arbitary links
 - Add warning are where messages can be shown, maybe console like
 
 - Authorization/Authentification support
   - basic authentification
   - JSON Web Tokens (+ OAuth?)
+
+- Add option to add custom headers using the config
+
+- make more pretty look for nested objects and lists
 
 ## Code
 - Refactor breadcrum into own control
