@@ -12,7 +12,7 @@ export class LinkViewComponent implements OnInit {
 
   @Input() links: HypermediaLink[];
 
-  constructor(private hypermediaClient: HypermediaClientService, private renderer: Renderer, private clipboardService: ClipboardService) { }
+  constructor(private hypermediaClient: HypermediaClientService, private clipboardService: ClipboardService) { }
 
   ngOnInit() {
   }
@@ -22,7 +22,6 @@ export class LinkViewComponent implements OnInit {
   }
 
   copyToClipBoard(hypermediaLink: HypermediaLink) {
-    this.clipboardService.copyFromContent(hypermediaLink.url, this.renderer);
+    this.clipboardService.copyFromContent(hypermediaLink.url);
   }
-
 }

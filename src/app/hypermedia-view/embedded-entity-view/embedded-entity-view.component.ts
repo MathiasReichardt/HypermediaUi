@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Renderer } from '@angular/core';
 import { EmbeddedLinkEntity } from '../siren-parser/embedded-link-entity';
 import { EmbeddedEntity } from '../siren-parser/embedded-entity';
 import { HypermediaClientService } from '../hypermedia-client.service';
-import { HypermediaLink } from '../siren-parser/hypermedia-link';
 import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
@@ -14,14 +13,14 @@ export class EmbeddedEntityViewComponent implements OnInit {
   @Input() embeddedLinkEntities: EmbeddedLinkEntity[];
   @Input() embeddedEntities: EmbeddedEntity[];
 
-  constructor(private hypermediaClient: HypermediaClientService, private renderer: Renderer, private clipboardService: ClipboardService) { }
+  constructor(private hypermediaClient: HypermediaClientService, private clipboardService: ClipboardService) { }
 
   navigateHref(href: string) {
     this.hypermediaClient.Navigate(href);
   }
 
   copyToClipBoard(href: string) {
-    this.clipboardService.copyFromContent(href, this.renderer);
+    this.clipboardService.copyFromContent(href);
   }
 
   ngOnInit() {
