@@ -1,5 +1,5 @@
 import { ReflectionHelpers } from './reflection-helpers';
-import { findAll, find, get, where, replace } from 'simple-object-query';
+import { find } from 'simple-object-query';
 
 export class SchemaSimplifier {
    simplifySchema(response: any) {

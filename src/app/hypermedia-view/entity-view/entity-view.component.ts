@@ -1,8 +1,6 @@
 import { HypermediaVieConfiguration } from './../hypermedia-view-configuration';
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SirenClientObject } from '../siren-parser/siren-client-object';
-import { EmbeddedLinkEntity } from '../siren-parser/embedded-link-entity';
-import { EmbeddedEntity } from '../siren-parser/embedded-entity';
 import { HypermediaLink } from '../siren-parser/hypermedia-link';
 import { HypermediaAction } from '../siren-parser/hypermedia-action';
 import { PropertyInfo } from '../siren-parser/property-info';
