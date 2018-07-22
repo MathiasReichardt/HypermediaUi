@@ -15,7 +15,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import { MatCardModule, MatListModule } from '@angular/material';
-import { JsonSchemaFormModule, MaterialDesignFrameworkModule, JsonSchemaFormService, FrameworkLibraryService, WidgetLibraryService, Framework, Bootstrap4FrameworkModule } from 'angular2-json-schema-form';
+import { JsonSchemaFormModule, MaterialDesignFrameworkModule, JsonSchemaFormService, FrameworkLibraryService, WidgetLibraryService, Framework } from 'angular2-json-schema-form';
 import { PrettyJsonModule } from 'angular2-prettyjson';
 
 import { ActionsViewComponent } from './actions-view/actions-view.component';
@@ -62,7 +62,7 @@ import { ClipboardModule } from 'ngx-clipboard';
           JsonSchemaFormService,
           FrameworkLibraryService,
           WidgetLibraryService,
-          {provide: Framework, useClass: Bootstrap4FrameworkModule, multi: true}
+          {provide: Framework, useClass: MaterialDesignFrameworkModule, multi: true}
       ]
     },
     PrettyJsonModule,
