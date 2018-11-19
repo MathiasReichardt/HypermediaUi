@@ -7,6 +7,9 @@ Use the demoserver "CarShack" from this project to have a quick compliant backen
 
 There will be bugs and it is not very fault tollerant. Be nice to the UI :)
 
+There is a demo deployment for testing:
+[demo](https://mathiasreichardt.github.io/HypermediaUiDemo/)
+
 # Todo List
 Clean up all the code todos :)
 
