@@ -26,6 +26,7 @@ Clean up all the code todos :)
 - Config Dialog:
   - default api on main page
   - developer configs: show empty sections, show classes, show raw tab
+  - store user config in a cookie
 
 - Read selflink and place a refresh button on entities, this could be the first link to extract from default rendering
 - Add copy button to arbitary links
