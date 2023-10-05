@@ -1,4 +1,7 @@
 # Hypermedia UI
+
+**THIS PROJECT HAS MOVED. It is now part of the [RESTyard](https://github.com/RESTyard) organization. Find it [here](https://github.com/RESTyard/HypermediaUI)**.
+
 This is an *experimental* UI to generically process Siren speaking http servers.
 Note that it is developed to access Siren APIs which format Actions using a accessable class link which delivers a JsonSchema.
 
